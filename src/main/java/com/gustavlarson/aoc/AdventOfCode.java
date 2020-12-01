@@ -1,37 +1,28 @@
 package com.gustavlarson.aoc;
 
-import com.gustavlarson.aoc.day.Day01;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AdventOfCode {
     private static final String INPUT_FOLDER = "input";
-
-    private static final Map<Integer, Day> DAYS;
-
-    static {
-        DAYS = new HashMap<>();
-        DAYS.put(1, new Day01());
-    }
 
     public static void main(final String[] args) {
         if (args.length != 1) {
             throw new IllegalArgumentException();
         }
 
-        final int day = Integer.parseInt(args[0]);
+        final int dayArg = Integer.parseInt(args[0]);
 
-        final List<String> input = loadInput(day);
+        final Day day = DayFactory.getDay(dayArg);
 
-        System.out.println("Solution part 1: " + DAYS.get(day).solvePart1(input));
-        System.out.println("Solution part 2: " + DAYS.get(day).solvePart2(input));
+        final List<String> input = loadInput(dayArg);
+
+        System.out.println("Solution part 1: " + day.solvePart1(input));
+        System.out.println("Solution part 2: " + day.solvePart2(input));
 
     }
 
