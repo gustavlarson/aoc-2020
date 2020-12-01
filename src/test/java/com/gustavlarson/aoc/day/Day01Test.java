@@ -31,4 +31,12 @@ public class Day01Test {
         final String result = day.solvePart1(input);
         assertEquals(1721 * 299, Integer.parseInt(result));
     }
+
+    @Test
+    public void test04() {
+        final Day day = new Day01();
+        final List<String> input = List.of("1721", "979", "366", "299", "675", "1456");
+        final String result = day.solvePart2(input);
+        assertEquals(979 * 366 * 675, Integer.parseInt(result));
+    }
 }
