@@ -1,11 +1,11 @@
 package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day01Test {
     @Test
