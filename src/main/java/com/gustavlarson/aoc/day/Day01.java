@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day01 implements Day {
+
     private static int solver(final List<String> input, final int count) {
         final List<Integer> expenses = input.parallelStream().map(Integer::parseInt).collect(Collectors.toList());
 
@@ -22,9 +23,9 @@ public class Day01 implements Day {
         if (count == 1) {
             return outer == 2020;
         }
-        return input.parallelStream().anyMatch(
-                inner -> recursiveMatcher(input, inner + outer, count - 1)
-        );
+        return input.parallelStream()
+                .filter(inner -> inner <= 2020 - outer) // Filter impossible candidates for performance improvement
+                .anyMatch(inner -> recursiveMatcher(input, inner + outer, count - 1));
     }
 
     @Override
