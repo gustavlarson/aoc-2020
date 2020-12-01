@@ -11,18 +11,20 @@ public class Day01 implements Day {
 
         // Find the n (count) elements that adds to 2020
         final List<Integer> result = expenses.parallelStream().filter(
-                value -> matcher(expenses, value, count)
+                value -> recursiveMatcher(expenses, value, count)
         ).collect(Collectors.toList());
 
         // Multiply the elements
         return result.stream().reduce(1, (a, b) -> a * b);
     }
 
-    private static boolean matcher(final List<Integer> input, final int value, final int count) {
+    private static boolean recursiveMatcher(final List<Integer> input, final int outer, final int count) {
         if (count == 1) {
-            return value == 2020;
+            return outer == 2020;
         }
-        return input.parallelStream().anyMatch(v -> matcher(input, v + value, count - 1));
+        return input.parallelStream().anyMatch(
+                inner -> recursiveMatcher(input, inner + outer, count - 1)
+        );
     }
 
     @Override
