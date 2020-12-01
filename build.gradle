@@ -7,7 +7,7 @@ group 'com.gustavlarson'
 version '1.0-SNAPSHOT'
 
 application {
-    mainClassName = 'com.gustavlarson.aoc.AdventOfCode'
+    mainClass.set('com.gustavlarson.aoc.AdventOfCode')
 }
 
 repositories {
