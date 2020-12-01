@@ -16,13 +16,18 @@ public class AdventOfCode {
         }
 
         final int dayArg = Integer.parseInt(args[0]);
-
         final Day day = DayFactory.getDay(dayArg);
-
         final List<String> input = loadInput(dayArg);
+
+        final long startTime = System.nanoTime();
 
         System.out.println("Solution part 1: " + day.solvePart1(input));
         System.out.println("Solution part 2: " + day.solvePart2(input));
+
+        final long endTime = System.nanoTime();
+        final long timeElapsed = endTime - startTime;
+        System.out.println();
+        System.out.println("Execution time in milliseconds: " + timeElapsed / 1000000.0);
 
     }
 
