@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class Day01 implements Day {
     @Override
-    public String solve(final List<String> input) {
+    public String solvePart1(final List<String> input) {
         final List<Integer> expenses = input.parallelStream().map(Integer::parseInt).collect(Collectors.toList());
 
         // Find the two elements that adds to 2020
@@ -17,5 +17,10 @@ public class Day01 implements Day {
 
         // Multiply the elements
         return "" + result.stream().reduce(1, (a, b) -> a * b);
+    }
+
+    @Override
+    public String solvePart2(final List<String> input) {
+        return null;
     }
 }

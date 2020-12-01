@@ -30,9 +30,9 @@ public class AdventOfCode {
 
         final List<String> input = loadInput(day);
 
-        final String result = DAYS.get(day).solve(input);
+        System.out.println("Solution part 1: " + DAYS.get(day).solvePart1(input));
+        System.out.println("Solution part 2: " + DAYS.get(day).solvePart2(input));
 
-        System.out.println(result);
     }
 
     private static List<String> loadInput(final int day) {
