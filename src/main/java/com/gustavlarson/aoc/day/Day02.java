@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class Day02 implements Day {
     Pattern pattern = Pattern.compile("(?<min>\\d+)-(?<max>\\d+) (?<letter>[a-zA-Z]): (?<password>\\w+)");
 
-    private boolean isValid(final String line) {
+    private boolean isValidPart1(final String line) {
         final Matcher matcher = pattern.matcher(line);
         if (!matcher.find()) {
             throw new IllegalArgumentException();
@@ -26,12 +26,26 @@ public class Day02 implements Day {
 
     @Override
     public String solvePart1(final List<String> input) {
-        final long validPasswords = input.parallelStream().filter(this::isValid).count();
+        final long validPasswords = input.parallelStream().filter(this::isValidPart1).count();
         return "" + validPasswords;
+    }
+
+    private boolean isValidPart2(final String line) {
+        final Matcher matcher = pattern.matcher(line);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException();
+        }
+        final int minCount = Integer.parseInt(matcher.group("min"));
+        final int maxCount = Integer.parseInt(matcher.group("max"));
+        final String letter = matcher.group("letter");
+        final String password = matcher.group("password");
+
+        return (password.charAt(minCount - 1) == letter.charAt(0) ^ password.charAt(maxCount - 1) == letter.charAt(0));
     }
 
     @Override
     public String solvePart2(final List<String> input) {
-        return null;
+        final long validPasswords = input.parallelStream().filter(this::isValidPart2).count();
+        return "" + validPasswords;
     }
 }
