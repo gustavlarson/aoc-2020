@@ -228,3 +228,6 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,java,intellij,macos,windows,linux,vscode
+
+# Ignore file with sensitive session information
+local.properties
