@@ -7,9 +7,9 @@ import java.util.stream.IntStream;
 
 public class Day03 implements Day {
 
-    public static final char TREE = '#';
+    private static final char TREE = '#';
 
-    private class Slope {
+    private static class Slope {
         final int right;
         final int down;
 
@@ -19,22 +19,32 @@ public class Day03 implements Day {
         }
     }
 
-    @Override
-    public String solvePart1(final List<String> input) {
+    private static long solver(final List<String> input, final List<Slope> slopes) {
         final int patternLength = input.get(0).length();
         final int slopeLength = input.size();
 
-        final long trees = IntStream.range(0, slopeLength)
-                .filter(i -> input.get(i).charAt((i * 3) % patternLength) == TREE)
-                .count();
-        return "" + trees;
+        return slopes.parallelStream()
+                // Compute number of trees in slope
+                .mapToLong(
+                        slope -> IntStream
+                                .range(0, slopeLength)
+                                .filter(i -> i % slope.down == 0)
+                                .filter(i -> input.get(i).charAt(((i / slope.down) * slope.right) % patternLength) == TREE)
+                                .count()
+                )
+                // Multiply number of trees in all slopes
+                .reduce(1, (a, b) -> a * b);
+    }
+
+    @Override
+    public String solvePart1(final List<String> input) {
+        final List<Slope> slopes = List.of(new Slope(3, 1));
+
+        return "" + solver(input, slopes);
     }
 
     @Override
     public String solvePart2(final List<String> input) {
-        final int patternLength = input.get(0).length();
-        final int slopeLength = input.size();
-
         final List<Slope> slopes = List.of(
                 new Slope(1, 1),
                 new Slope(3, 1),
@@ -42,14 +52,6 @@ public class Day03 implements Day {
                 new Slope(7, 1),
                 new Slope(1, 2));
 
-        final long result = slopes.parallelStream().mapToLong(
-                slope -> IntStream
-                        .range(0, slopeLength)
-                        .filter(i -> i % slope.down == 0)
-                        .filter(i -> input.get(i).charAt(((i / slope.down) * slope.right) % patternLength) == TREE)
-                        .count()
-
-        ).reduce(1, (a, b) -> a * b);
-        return "" + result;
+        return "" + solver(input, slopes);
     }
 }
