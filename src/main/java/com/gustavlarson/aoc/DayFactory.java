@@ -2,6 +2,7 @@ package com.gustavlarson.aoc;
 
 import com.gustavlarson.aoc.day.Day01;
 import com.gustavlarson.aoc.day.Day02;
+import com.gustavlarson.aoc.day.Day03;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ public class DayFactory {
     static {
         register(1, new Day01());
         register(2, new Day02());
+        register(3, new Day03());
     }
 
     private static void register(final int day, final Day instance) {
