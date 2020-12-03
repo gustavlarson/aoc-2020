@@ -25,3 +25,26 @@ test {
         events 'passed', 'skipped', 'failed'
     }
 }
+
+task getInput(type: Exec) {
+    def day = getDay()
+    def session = getSession()
+    def url = 'https://adventofcode.com/2020/day/' + day + '/input'
+    def output = 'input/day' + day.padLeft(2, '0') + '.txt'
+
+    executable 'curl'
+    args url, '--cookie', 'session=' + session, '-o', output
+}
+
+static def getDay() {
+    return System.getenv('AOC_DAY') ?: new Date()[Calendar.DAY_OF_MONTH].toString()
+}
+
+def getSession() {
+    Properties properties = new Properties()
+    def propertiesFile = project.rootProject.file('local.properties')
+    if (propertiesFile.exists()) {
+        properties.load(propertiesFile.newDataInputStream())
+    }
+    return properties.getProperty('session')
+}
