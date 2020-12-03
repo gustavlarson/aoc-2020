@@ -11,9 +11,9 @@ public class TestTemplate {
     @Test
     public void testPart101() {
         final Day day = new Day01();
-        final List<String> input = List.of("line1", "line2");
+        final List<String> input = List.of("1", "2");
         final String result = day.solvePart1(input);
-        assertEquals("", result);
+        assertEquals("1", result);
     }
 
 }
