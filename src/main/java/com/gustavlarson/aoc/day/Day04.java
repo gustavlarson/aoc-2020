@@ -2,119 +2,122 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day04 implements Day {
+    private static final Pattern fieldPattern = Pattern.compile("(?<field>[a-z]{3}):(?<value>[#a-z0-9]+)(\\s|$)");
+    private static final Pattern heightPattern = Pattern.compile("(\\d+)(cm|in)");
+    private static final Pattern colorPattern = Pattern.compile("^#[0-9a-f]{6}$");
+    private static final Pattern passportIdPattern = Pattern.compile("^[0-9]{9}$");
+
+    static class Passport {
+        String byr, iyr, eyr, hgt, hcl, ecl, pid;
+
+        Passport(final String line) {
+            final Matcher matcher = fieldPattern.matcher(line);
+            while (matcher.find()) {
+                final String field = matcher.group("field");
+                final String value = matcher.group("value");
+
+                switch (field) {
+                    case "byr" -> byr = value;
+                    case "iyr" -> iyr = value;
+                    case "eyr" -> eyr = value;
+                    case "hgt" -> hgt = value;
+                    case "hcl" -> hcl = value;
+                    case "ecl" -> ecl = value;
+                    case "pid" -> pid = value;
+                }
+            }
+        }
+
+        boolean hasAllRequiredFields() {
+            return (byr != null) &&
+                    (iyr != null) &&
+                    (eyr != null) &&
+                    (hgt != null) &&
+                    (hcl != null) &&
+                    (ecl != null) &&
+                    (pid != null);
+        }
+
+        boolean hasOnlyValidFields() {
+            return hasAllRequiredFields() &&
+                    validateIntBetween(byr, 1920, 2010) &&
+                    validateIntBetween(iyr, 2010, 2020) &&
+                    validateIntBetween(eyr, 2020, 2030) &&
+                    validateHeight() &&
+                    validateHairColor() &&
+                    validateEyeColor() &&
+                    validatePassportId();
+        }
+
+        private static boolean validateIntBetween(final String input, final int min, final int max) {
+            try {
+                final int value = Integer.parseInt(input);
+                if (value >= min && value <= max) {
+                    return true;
+                }
+            } catch (final NumberFormatException ignored) {
+            }
+            return false;
+        }
+
+        private boolean validateHeight() {
+            final Matcher matcher = heightPattern.matcher(hgt);
+            if (!matcher.find()) {
+                return false;
+            }
+            final int height = Integer.parseInt(matcher.group(1));
+            final String unit = matcher.group(2);
+
+            if (unit.equals("cm") && height >= 150 && height <= 193) return true;
+            if (unit.equals("in") && height >= 50 && height <= 76) return true;
+
+            return false;
+        }
+
+        private boolean validateHairColor() {
+            final Matcher matcher = colorPattern.matcher(hcl);
+            return matcher.find();
+        }
+
+        private boolean validateEyeColor() {
+            return switch (ecl) {
+                case "amb", "blu", "brn", "gry", "grn", "hzl", "oth" -> true;
+                default -> false;
+            };
+        }
+
+        private boolean validatePassportId() {
+            final Matcher matcher = passportIdPattern.matcher(pid);
+            return matcher.find();
+        }
+    }
+
+    static List<Passport> getPassports(final List<String> input) {
+        return Arrays
+                .stream(String.join(" \n", input).split("\n \n"))
+                .parallel()
+                .map(Passport::new)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public String solvePart1(final List<String> input) {
-        final List<String> passports = new ArrayList<>();
-        var tempString = "";
-        for (final var line : input) {
-            if (line.length() > 0) {
-                tempString = tempString.concat(" " + line);
-            } else {
-                passports.add(tempString);
-                tempString = "";
-            }
-        }
-        passports.add(tempString);
+        final List<Passport> passports = getPassports(input);
 
-        var counter = 0;
-        for (final var passport : passports) {
-            if (passport.contains("byr:") &&
-                    passport.contains("iyr:") &&
-                    passport.contains("eyr:") &&
-                    passport.contains("hgt:") &&
-                    passport.contains("hcl:") &&
-                    passport.contains("ecl:") &&
-                    passport.contains("pid:")
-            ) {
-                counter++;
-            }
-        }
-
-        return "" + counter;
+        return "" + passports.parallelStream().filter(Passport::hasAllRequiredFields).count();
     }
-
-    private final Pattern byrp = Pattern.compile("byr:(\\d+)");
-    private final Pattern iyrp = Pattern.compile("iyr:(\\d+)");
-    private final Pattern eyrp = Pattern.compile("eyr:(\\d+)");
-    private final Pattern hgtp = Pattern.compile("hgt:(\\d+)(cm|in)");
-    private final Pattern hclp = Pattern.compile("hcl:#[0-9a-f]{6}\\s");
-    private final Pattern eclp = Pattern.compile("ecl:(amb|blu|brn|gry|grn|hzl|oth)");
-    private final Pattern pidp = Pattern.compile("pid:[0-9]{9}\\s");
 
     @Override
     public String solvePart2(final List<String> input) {
-        final List<String> passports = new ArrayList<>();
-        var tempString = "";
-        for (final var line : input) {
-            if (line.length() > 0) {
-                tempString = tempString.concat(" " + line);
-            } else {
-                passports.add(tempString + " ");
-                tempString = "";
-            }
-        }
-        passports.add(tempString + " ");
+        final List<Passport> passports = getPassports(input);
 
-        var counter = 0;
-        for (final var passport : passports) {
-            final Matcher byrm = byrp.matcher(passport);
-            if (!byrm.find()) {
-                continue;
-            }
-            int year = Integer.parseInt(byrm.group(1));
-            if (year < 1920 || year > 2002) {
-                continue;
-            }
-            final Matcher iyrm = iyrp.matcher(passport);
-            if (!iyrm.find()) {
-                continue;
-            }
-            year = Integer.parseInt(iyrm.group(1));
-            if (year < 2010 || year > 2020) {
-                continue;
-            }
-            final Matcher eyrm = eyrp.matcher(passport);
-            if (!eyrm.find()) {
-                continue;
-            }
-            year = Integer.parseInt(eyrm.group(1));
-            if (year < 2020 || year > 2030) {
-                continue;
-            }
-            final Matcher hgtm = hgtp.matcher(passport);
-            if (!hgtm.find()) {
-                continue;
-            }
-            final int hgt = Integer.parseInt(hgtm.group(1));
-            if (hgtm.group(2).equals("cm") && (hgt < 150 || hgt > 193)) {
-                continue;
-            }
-            if (hgtm.group(2).equals("in") && (hgt < 59 || hgt > 76)) {
-                continue;
-            }
-            final Matcher hclm = hclp.matcher(passport);
-            if (!hclm.find()) {
-                continue;
-            }
-            final Matcher eclm = eclp.matcher(passport);
-            if (!eclm.find()) {
-                continue;
-            }
-            final Matcher pidm = pidp.matcher(passport);
-            if (!pidm.find()) {
-                continue;
-            }
-
-            counter++;
-        }
-
-        return "" + counter;
+        return "" + passports.parallelStream().filter(Passport::hasOnlyValidFields).count();
     }
 }
