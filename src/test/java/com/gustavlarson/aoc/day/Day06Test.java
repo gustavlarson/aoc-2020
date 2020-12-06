@@ -31,4 +31,20 @@ public class Day06Test {
         final String result = day.solvePart1(input);
         assertEquals("11", result);
     }
+
+    @Test
+    public void testPart201() {
+        final Day day = new Day06();
+        final List<String> input = List.of("abc");
+        final String result = day.solvePart2(input);
+        assertEquals("3", result);
+    }
+
+    @Test
+    public void testPart202() {
+        final Day day = new Day06();
+        final List<String> input = List.of("abc", "", "a", "b", "c");
+        final String result = day.solvePart2(input);
+        assertEquals("3", result);
+    }
 }
