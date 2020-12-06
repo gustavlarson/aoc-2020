@@ -24,4 +24,11 @@ public class Day06Test {
         assertEquals("6", result);
     }
 
+    @Test
+    public void testPart103() {
+        final Day day = new Day06();
+        final List<String> input = List.of("abc", "", "a", "b", "c", "", "ab", "ac", "", "a", "a", "a", "a", "", "b");
+        final String result = day.solvePart1(input);
+        assertEquals("11", result);
+    }
 }

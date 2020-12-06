@@ -7,16 +7,16 @@ import java.util.List;
 
 public class Day06 implements Day {
 
-    static int getNumberOfAnswers(final String input) {
-        return 3;
+    static long getNumberOfAnswers(final String input) {
+        return input.chars().filter(c -> c >= 'a' && c <= 'z').distinct().count();
     }
 
     @Override
     public String solvePart1(final List<String> input) {
-        final int res = Arrays
+        final long res = Arrays
                 .stream(String.join(" \n", input).split("\n \n"))
                 .parallel()
-                .mapToInt(Day06::getNumberOfAnswers)
+                .mapToLong(Day06::getNumberOfAnswers)
                 .sum();
 
         return "" + res;
