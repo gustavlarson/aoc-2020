@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.gustavlarson.aoc.day.TestHelper.getAsList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day03Test {
@@ -31,18 +32,20 @@ public class Day03Test {
 
     @Test
     public void testPart201() {
-        final List<String> input = List.of(
-                "..##.......",
-                "#...#...#..",
-                ".#....#..#.",
-                "..#.#...#.#",
-                ".#...##..#.",
-                "..#.##.....",
-                ".#.#.#....#",
-                ".#........#",
-                "#.##...#...",
-                "#...##....#",
-                ".#..#...#.#");
+        final List<String> input = getAsList("""
+                ..##.......
+                #...#...#..
+                .#....#..#.
+                ..#.#...#.#
+                .#...##..#.
+                ..#.##.....
+                .#.#.#....#
+                .#........#
+                #.##...#...
+                #...##....#
+                .#..#...#.#
+                                """);
+
         final Day day = new Day03(input);
         assertEquals(336, day.solvePart2());
     }
