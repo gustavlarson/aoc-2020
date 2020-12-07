@@ -3,9 +3,7 @@ package com.gustavlarson.aoc.day;
 import com.gustavlarson.aoc.Day;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,7 +16,7 @@ public class Day06 implements Day {
     @Override
     public String solvePart1(final List<String> input) {
         final long res = Arrays
-                .stream(String.join("\n", input).split("\n\n"))
+                .stream(splitIntoGroups(input))
                 .parallel()
                 .mapToLong(Day06::getNumberOfAnswersP1)
                 .sum();
@@ -26,10 +24,14 @@ public class Day06 implements Day {
         return "" + res;
     }
 
+    private static String[] splitIntoGroups(final List<String> input) {
+        return String.join("\n", input).split("\n\n");
+    }
+
     @Override
     public String solvePart2(final List<String> input) {
         final long res = Arrays
-                .stream(String.join("\n", input).split("\n\n"))
+                .stream(splitIntoGroups(input))
                 .parallel()
                 .mapToLong(Day06::getNumberOfAnswersP2)
                 .sum();
@@ -38,10 +40,9 @@ public class Day06 implements Day {
     }
 
     private static long getNumberOfAnswersP2(final String input) {
-        final Map<Character, Integer> map = new HashMap<>();
-        final List<String> lines = Arrays.stream(input.split("\n")).collect(Collectors.toList());
+        final List<String> passengers = Arrays.stream(input.split("\n")).collect(Collectors.toList());
         return IntStream.rangeClosed('a', 'z').filter(
-                c -> lines.stream().allMatch(line -> line.contains("" + (char) c))
+                c -> passengers.stream().allMatch(line -> line.contains("" + (char) c))
         ).count();
 
     }
