@@ -15,6 +15,7 @@ public class DayFactory {
         register(4, new Day04());
         register(5, new Day05());
         register(6, new Day06());
+        register(7, new Day07());
     }
 
     private static void register(final int day, final Day instance) {
