@@ -49,19 +49,20 @@ public class Day07 implements Day {
         return "" + rules.keySet().stream().filter(key -> containsShinyGold(rules, key)).count();
     }
 
+    private static int countBags(final Map<String, Map<String, Integer>> rules, final String key) {
+        final Map<String, Integer> map = rules.get(key);
+        return map.keySet().stream().mapToInt(
+                k -> map.get(k) * countBags(rules, k)
+        ).sum() + 1;
+    }
+
     @Override
     public String solvePart2(final List<String> input) {
         final Map<String, Map<String, Integer>> rules = extractRules(input);
 
-        return "" + (countBags(rules, "shiny gold") - 1);
+        return "" + (countBags(rules, "shiny gold") - 1); //Don't count the shiny gold bag itself.
 
     }
 
-    private static int countBags(final Map<String, Map<String, Integer>> rules, final String key) {
-        final int[] count = {0};
-        rules.get(key).forEach((k, v) -> {
-            count[0] += countBags(rules, k) * v;
-        });
-        return count[0] + 1;
-    }
+
 }
