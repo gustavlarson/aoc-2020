@@ -12,8 +12,8 @@ public class Day05 implements Day {
     }
 
     @Override
-    public String solvePart1() {
-        return "" + input.parallelStream().mapToInt(Day05::getSeatId).max().orElseThrow();
+    public long solvePart1() {
+        return input.parallelStream().mapToInt(Day05::getSeatId).max().orElseThrow();
     }
 
     private static int getSeatId(final String boardingPass) {
@@ -29,11 +29,11 @@ public class Day05 implements Day {
     }
 
     @Override
-    public String solvePart2() {
+    public long solvePart2() {
         final int[] arr = input.parallelStream().mapToInt(Day05::getSeatId).sorted().toArray();
         for (var i = 0; i < arr.length; i++) {
             if (Math.abs(arr[i] - arr[i + 1]) == 2) {
-                return "" + (arr[i] + arr[i + 1]) / 2;
+                return (arr[i] + arr[i + 1]) / 2;
             }
         }
         throw new IllegalArgumentException();

@@ -12,8 +12,7 @@ public class Day07Test {
     public void testPart101() {
         final List<String> input = List.of("bright white bags contain 1 shiny gold bag.");
         final Day day = new Day07(input);
-        final String result = day.solvePart1();
-        assertEquals("1", result);
+        assertEquals(1, day.solvePart1());
     }
 
     @Test
@@ -23,8 +22,7 @@ public class Day07Test {
                 "muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.",
                 "dotted black bags contain no other bags.");
         final Day day = new Day07(input);
-        final String result = day.solvePart1();
-        assertEquals("2", result);
+        assertEquals(2, day.solvePart1());
     }
 
     @Test
@@ -39,8 +37,7 @@ public class Day07Test {
                 "faded blue bags contain no other bags.",
                 "dotted black bags contain no other bags.");
         final Day day = new Day07(input);
-        final String result = day.solvePart1();
-        assertEquals("4", result);
+        assertEquals(4, day.solvePart1());
     }
 
     @Test
@@ -55,7 +52,6 @@ public class Day07Test {
                 "faded blue bags contain no other bags.",
                 "dotted black bags contain no other bags.");
         final Day day = new Day07(input);
-        final String result = day.solvePart2();
-        assertEquals("32", result);
+        assertEquals(32, day.solvePart2());
     }
 }

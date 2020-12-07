@@ -36,9 +36,8 @@ public class Day02 implements Day {
     }
 
     @Override
-    public String solvePart1() {
-        final long validPasswords = input.parallelStream().filter(Day02::isValidPart1).count();
-        return "" + validPasswords;
+    public long solvePart1() {
+        return input.parallelStream().filter(Day02::isValidPart1).count();
     }
 
     private static boolean isValidPart2(final String line) {
@@ -55,8 +54,7 @@ public class Day02 implements Day {
     }
 
     @Override
-    public String solvePart2() {
-        final long validPasswords = input.parallelStream().filter(Day02::isValidPart2).count();
-        return "" + validPasswords;
+    public long solvePart2() {
+        return input.parallelStream().filter(Day02::isValidPart2).count();
     }
 }

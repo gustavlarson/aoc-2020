@@ -11,16 +11,14 @@ public class TestTemplate {
     @Test
     public void testPart101() {
         final List<String> input = List.of("1", "2");
-        final Day day = new Day01(input);
-        final String result = day.solvePart1();
-        assertEquals("1", result);
+        final Day day = new DayTemplate(input);
+        assertEquals(0, day.solvePart1());
     }
 
     @Test
     public void testPart201() {
         final List<String> input = List.of("1", "2");
-        final Day day = new Day01(input);
-        final String result = day.solvePart2();
-        assertEquals("1", result);
+        final Day day = new DayTemplate(input);
+        assertEquals(0, day.solvePart2());
     }
 }

@@ -12,15 +12,13 @@ public class Day05Test {
     public void testPart101() {
         final List<String> input = List.of("FBFBBFFRLR");
         final Day day = new Day05(input);
-        final String result = day.solvePart1();
-        assertEquals("357", result);
+        assertEquals(357, day.solvePart1());
     }
 
     @Test
     public void testPart102() {
         final List<String> input = List.of("FBFBBFFRLR", "BFFFBBFRRR");
         final Day day = new Day05(input);
-        final String result = day.solvePart1();
-        assertEquals("567", result);
+        assertEquals(567, day.solvePart1());
     }
 }

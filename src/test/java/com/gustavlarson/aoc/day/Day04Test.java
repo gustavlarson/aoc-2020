@@ -16,8 +16,7 @@ public class Day04Test {
                 "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884",
                 "hcl:#cfa07d byr:1929");
         final Day day = new Day04(input);
-        final String result = day.solvePart1();
-        assertEquals("1", result);
+        assertEquals(1, day.solvePart1());
     }
 
     @Test
@@ -36,8 +35,7 @@ public class Day04Test {
                 "hcl:#cfa07d eyr:2025 pid:166559648",
                 "iyr:2011 ecl:brn hgt:59in");
         final Day day = new Day04(input);
-        final String result = day.solvePart1();
-        assertEquals("2", result);
+        assertEquals(2, day.solvePart1());
     }
 
     @Test
@@ -56,8 +54,7 @@ public class Day04Test {
                 "",
                 "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719");
         final Day day = new Day04(input);
-        final String result = day.solvePart2();
-        assertEquals("4", result);
+        assertEquals(4, day.solvePart2());
     }
 
     @Test
@@ -94,7 +91,6 @@ public class Day04Test {
                 "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:0931547199");
         final Day day = new Day04(input);
 
-        final String result = day.solvePart2();
-        assertEquals("0", result);
+        assertEquals(0, day.solvePart2());
     }
 }

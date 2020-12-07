@@ -12,39 +12,34 @@ public class Day06Test {
     public void testPart101() {
         final List<String> input = List.of("abc");
         final Day day = new Day06(input);
-        final String result = day.solvePart1();
-        assertEquals("3", result);
+        assertEquals(3, day.solvePart1());
     }
 
     @Test
     public void testPart102() {
         final List<String> input = List.of("abc", "", "a", "b", "c");
         final Day day = new Day06(input);
-        final String result = day.solvePart1();
-        assertEquals("6", result);
+        assertEquals(6, day.solvePart1());
     }
 
     @Test
     public void testPart103() {
         final List<String> input = List.of("abc", "", "a", "b", "c", "", "ab", "ac", "", "a", "a", "a", "a", "", "b");
         final Day day = new Day06(input);
-        final String result = day.solvePart1();
-        assertEquals("11", result);
+        assertEquals(11, day.solvePart1());
     }
 
     @Test
     public void testPart201() {
         final List<String> input = List.of("abc");
         final Day day = new Day06(input);
-        final String result = day.solvePart2();
-        assertEquals("3", result);
+        assertEquals(3, day.solvePart2());
     }
 
     @Test
     public void testPart202() {
         final List<String> input = List.of("abc", "", "a", "b", "c");
         final Day day = new Day06(input);
-        final String result = day.solvePart2();
-        assertEquals("3", result);
+        assertEquals(3, day.solvePart2());
     }
 }

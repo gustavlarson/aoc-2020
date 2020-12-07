@@ -114,16 +114,16 @@ public class Day04 implements Day {
     }
 
     @Override
-    public String solvePart1() {
+    public long solvePart1() {
         final List<Passport> passports = getPassports(input);
 
-        return "" + passports.parallelStream().filter(Passport::hasAllRequiredFields).count();
+        return passports.parallelStream().filter(Passport::hasAllRequiredFields).count();
     }
 
     @Override
-    public String solvePart2() {
+    public long solvePart2() {
         final List<Passport> passports = getPassports(input);
 
-        return "" + passports.parallelStream().filter(Passport::hasOnlyValidFields).count();
+        return passports.parallelStream().filter(Passport::hasOnlyValidFields).count();
     }
 }

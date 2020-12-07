@@ -42,14 +42,14 @@ public class Day03 implements Day {
     }
 
     @Override
-    public String solvePart1() {
+    public long solvePart1() {
         final List<Slope> slopes = List.of(new Slope(3, 1));
 
-        return "" + solver(slopes);
+        return solver(slopes);
     }
 
     @Override
-    public String solvePart2() {
+    public long solvePart2() {
         final List<Slope> slopes = List.of(
                 new Slope(1, 1),
                 new Slope(3, 1),
@@ -57,6 +57,6 @@ public class Day03 implements Day {
                 new Slope(7, 1),
                 new Slope(1, 2));
 
-        return "" + solver(slopes);
+        return solver(slopes);
     }
 }

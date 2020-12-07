@@ -32,12 +32,12 @@ public class Day01 implements Day {
     }
 
     @Override
-    public String solvePart1() {
-        return "" + solver(2);
+    public long solvePart1() {
+        return solver(2);
     }
 
     @Override
-    public String solvePart2() {
-        return "" + solver(3);
+    public long solvePart2() {
+        return solver(3);
     }
 }

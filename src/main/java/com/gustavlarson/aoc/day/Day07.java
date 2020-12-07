@@ -48,10 +48,10 @@ public class Day07 implements Day {
     }
 
     @Override
-    public String solvePart1() {
+    public long solvePart1() {
         final Map<String, Map<String, Integer>> rules = extractRules(input);
 
-        return "" + rules.keySet().stream().filter(key -> containsShinyGold(rules, key)).count();
+        return rules.keySet().stream().filter(key -> containsShinyGold(rules, key)).count();
     }
 
     private static int countBags(final Map<String, Map<String, Integer>> rules, final String key) {
@@ -62,10 +62,10 @@ public class Day07 implements Day {
     }
 
     @Override
-    public String solvePart2() {
+    public long solvePart2() {
         final Map<String, Map<String, Integer>> rules = extractRules(input);
 
-        return "" + (countBags(rules, "shiny gold") - 1); //Don't count the shiny gold bag itself.
+        return countBags(rules, "shiny gold") - 1; //Don't count the shiny gold bag itself.
 
     }
 

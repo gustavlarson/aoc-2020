@@ -1,7 +1,7 @@
 package com.gustavlarson.aoc;
 
 public interface Day {
-    String solvePart1();
+    long solvePart1();
 
-    String solvePart2();
+    long solvePart2();
 }

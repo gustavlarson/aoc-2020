@@ -13,12 +13,12 @@ public class DayTemplate implements Day {
     }
 
     @Override
-    public String solvePart1() {
-        return null;
+    public long solvePart1() {
+        return 0;
     }
 
     @Override
-    public String solvePart2() {
-        return null;
+    public long solvePart2() {
+        return 0;
     }
 }

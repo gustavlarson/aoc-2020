@@ -12,24 +12,21 @@ public class Day03Test {
     public void testPart101() {
         final List<String> input = List.of("..##.......");
         final Day day = new Day03(input);
-        final String result = day.solvePart1();
-        assertEquals("0", result);
+        assertEquals(0, day.solvePart1());
     }
 
     @Test
     public void testPart102() {
         final List<String> input = List.of("..##.......", "#...#...#..");
         final Day day = new Day03(input);
-        final String result = day.solvePart1();
-        assertEquals("0", result);
+        assertEquals(0, day.solvePart1());
     }
 
     @Test
     public void testPart103() {
         final List<String> input = List.of("..##.......", "#...#...#..", ".#....#..#.");
         final Day day = new Day03(input);
-        final String result = day.solvePart1();
-        assertEquals("1", result);
+        assertEquals(1, day.solvePart1());
     }
 
     @Test
@@ -47,7 +44,6 @@ public class Day03Test {
                 "#...##....#",
                 ".#..#...#.#");
         final Day day = new Day03(input);
-        final String result = day.solvePart2();
-        assertEquals("336", result);
+        assertEquals(336, day.solvePart2());
     }
 }

@@ -20,14 +20,14 @@ public class Day06 implements Day {
     }
 
     @Override
-    public String solvePart1() {
+    public long solvePart1() {
         final long res = Arrays
                 .stream(splitIntoGroups(input))
                 .parallel()
                 .mapToLong(Day06::getNumberOfAnswersP1)
                 .sum();
 
-        return "" + res;
+        return res;
     }
 
     private static String[] splitIntoGroups(final List<String> input) {
@@ -35,14 +35,14 @@ public class Day06 implements Day {
     }
 
     @Override
-    public String solvePart2() {
+    public long solvePart2() {
         final long res = Arrays
                 .stream(splitIntoGroups(input))
                 .parallel()
                 .mapToLong(Day06::getNumberOfAnswersP2)
                 .sum();
 
-        return "" + res;
+        return res;
     }
 
     private static long getNumberOfAnswersP2(final String input) {
