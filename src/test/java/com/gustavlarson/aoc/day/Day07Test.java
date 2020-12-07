@@ -10,26 +10,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day07Test {
     @Test
     public void testPart101() {
-        final Day day = new Day07();
         final List<String> input = List.of("bright white bags contain 1 shiny gold bag.");
-        final String result = day.solvePart1(input);
+        final Day day = new Day07(input);
+        final String result = day.solvePart1();
         assertEquals("1", result);
     }
 
     @Test
     public void testPart102() {
-        final Day day = new Day07();
         final List<String> input = List.of(
                 "bright white bags contain 1 shiny gold bag.",
                 "muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.",
                 "dotted black bags contain no other bags.");
-        final String result = day.solvePart1(input);
+        final Day day = new Day07(input);
+        final String result = day.solvePart1();
         assertEquals("2", result);
     }
 
     @Test
     public void testPart103() {
-        final Day day = new Day07();
         final List<String> input = List.of("light red bags contain 1 bright white bag, 2 muted yellow bags.",
                 "dark orange bags contain 3 bright white bags, 4 muted yellow bags.",
                 "bright white bags contain 1 shiny gold bag.",
@@ -39,13 +38,13 @@ public class Day07Test {
                 "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.",
                 "faded blue bags contain no other bags.",
                 "dotted black bags contain no other bags.");
-        final String result = day.solvePart1(input);
+        final Day day = new Day07(input);
+        final String result = day.solvePart1();
         assertEquals("4", result);
     }
 
     @Test
     public void testPart201() {
-        final Day day = new Day07();
         final List<String> input = List.of("light red bags contain 1 bright white bag, 2 muted yellow bags.",
                 "dark orange bags contain 3 bright white bags, 4 muted yellow bags.",
                 "bright white bags contain 1 shiny gold bag.",
@@ -55,7 +54,8 @@ public class Day07Test {
                 "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.",
                 "faded blue bags contain no other bags.",
                 "dotted black bags contain no other bags.");
-        final String result = day.solvePart2(input);
+        final Day day = new Day07(input);
+        final String result = day.solvePart2();
         assertEquals("32", result);
     }
 }

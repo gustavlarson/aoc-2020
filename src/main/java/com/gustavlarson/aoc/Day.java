@@ -1,10 +1,7 @@
 package com.gustavlarson.aoc;
 
-import java.util.List;
-
 public interface Day {
+    String solvePart1();
 
-    String solvePart1(List<String> input);
-
-    String solvePart2(List<String> input);
+    String solvePart2();
 }

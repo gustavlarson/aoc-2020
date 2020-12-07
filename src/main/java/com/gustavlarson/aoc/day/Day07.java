@@ -9,10 +9,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day07 implements Day {
-    private final Pattern colorPattern = Pattern.compile("(?<name>.*) bags contain (?<rule>.*)");
-    private final Pattern rulePattern = Pattern.compile("(?<number>\\d+) (?<name>[\\w\\s]+) bag");
+    private static final Pattern colorPattern = Pattern.compile("(?<name>.*) bags contain (?<rule>.*)");
+    private static final Pattern rulePattern = Pattern.compile("(?<number>\\d+) (?<name>[\\w\\s]+) bag");
+    private final List<String> input;
 
-    Map<String, Map<String, Integer>> extractRules(final List<String> input) {
+    public Day07(final List<String> input) {
+        this.input = input;
+    }
+
+    static Map<String, Map<String, Integer>> extractRules(final List<String> input) {
         final Map<String, Map<String, Integer>> rules = new HashMap<>();
 
         input.forEach(line -> {
@@ -43,7 +48,7 @@ public class Day07 implements Day {
     }
 
     @Override
-    public String solvePart1(final List<String> input) {
+    public String solvePart1() {
         final Map<String, Map<String, Integer>> rules = extractRules(input);
 
         return "" + rules.keySet().stream().filter(key -> containsShinyGold(rules, key)).count();
@@ -57,7 +62,7 @@ public class Day07 implements Day {
     }
 
     @Override
-    public String solvePart2(final List<String> input) {
+    public String solvePart2() {
         final Map<String, Map<String, Integer>> rules = extractRules(input);
 
         return "" + (countBags(rules, "shiny gold") - 1); //Don't count the shiny gold bag itself.

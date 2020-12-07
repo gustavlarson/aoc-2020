@@ -7,7 +7,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day02 implements Day {
+
     private static final Pattern pattern = Pattern.compile("(?<min>\\d+)-(?<max>\\d+) (?<letter>[a-zA-Z]): (?<password>\\w+)");
+    private final List<String> input;
+
+    public Day02(final List<String> input) {
+        this.input = input;
+    }
 
     private static Matcher getMatcher(final String line) {
         final Matcher matcher = pattern.matcher(line);
@@ -30,7 +36,7 @@ public class Day02 implements Day {
     }
 
     @Override
-    public String solvePart1(final List<String> input) {
+    public String solvePart1() {
         final long validPasswords = input.parallelStream().filter(Day02::isValidPart1).count();
         return "" + validPasswords;
     }
@@ -49,7 +55,7 @@ public class Day02 implements Day {
     }
 
     @Override
-    public String solvePart2(final List<String> input) {
+    public String solvePart2() {
         final long validPasswords = input.parallelStream().filter(Day02::isValidPart2).count();
         return "" + validPasswords;
     }

@@ -10,31 +10,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day03Test {
     @Test
     public void testPart101() {
-        final Day day = new Day03();
         final List<String> input = List.of("..##.......");
-        final String result = day.solvePart1(input);
+        final Day day = new Day03(input);
+        final String result = day.solvePart1();
         assertEquals("0", result);
     }
 
     @Test
     public void testPart102() {
-        final Day day = new Day03();
         final List<String> input = List.of("..##.......", "#...#...#..");
-        final String result = day.solvePart1(input);
+        final Day day = new Day03(input);
+        final String result = day.solvePart1();
         assertEquals("0", result);
     }
 
     @Test
     public void testPart103() {
-        final Day day = new Day03();
         final List<String> input = List.of("..##.......", "#...#...#..", ".#....#..#.");
-        final String result = day.solvePart1(input);
+        final Day day = new Day03(input);
+        final String result = day.solvePart1();
         assertEquals("1", result);
     }
 
     @Test
     public void testPart201() {
-        final Day day = new Day03();
         final List<String> input = List.of(
                 "..##.......",
                 "#...#...#..",
@@ -47,7 +46,8 @@ public class Day03Test {
                 "#.##...#...",
                 "#...##....#",
                 ".#..#...#.#");
-        final String result = day.solvePart2(input);
+        final Day day = new Day03(input);
+        final String result = day.solvePart2();
         assertEquals("336", result);
     }
 }
