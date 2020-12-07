@@ -2,55 +2,35 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class Day05 implements Day {
+    private static int getSeatId(final String boardingPass) {
+        return Integer.parseInt(toBinary(boardingPass), 2);
+    }
+
+    private static String toBinary(final String boardingPass) {
+        return boardingPass
+                .replace('F', '0')
+                .replace('B', '1')
+                .replace('R', '1')
+                .replace('L', '0');
+    }
 
     @Override
     public String solvePart1(final List<String> input) {
         return "" + input.parallelStream().mapToInt(Day05::getSeatId).max().orElseThrow();
     }
 
-    private static int getSeatId(final String boardingPass) {
-        return 8 * getRow(boardingPass) + getColumn(boardingPass);
-    }
-
-    private static int getColumn(final String boardingPass) {
-        final int[][] rows = {IntStream.range(0, 8).toArray()};
-        boardingPass.chars().skip(7).forEach(c -> {
-            if (c == 'L') {
-                rows[0] = Arrays.stream(rows[0]).limit(rows[0].length / 2).toArray();
-            } else if (c == 'R') {
-                rows[0] = Arrays.stream(rows[0]).skip(rows[0].length / 2).toArray();
-            }
-        });
-
-        return rows[0][0];
-    }
-
-    private static int getRow(final String boardingPass) {
-        final int[][] rows = {IntStream.range(0, 128).toArray()};
-        boardingPass.chars().limit(7).forEach(c -> {
-            if (c == 'F') {
-                rows[0] = Arrays.stream(rows[0]).limit(rows[0].length / 2).toArray();
-            } else if (c == 'B') {
-                rows[0] = Arrays.stream(rows[0]).skip(rows[0].length / 2).toArray();
-            }
-        });
-
-        return rows[0][0];
-    }
 
     @Override
     public String solvePart2(final List<String> input) {
         final int[] arr = input.parallelStream().mapToInt(Day05::getSeatId).sorted().toArray();
         for (var i = 0; i < arr.length; i++) {
-            if (arr[i] - arr[i + 1] == -2) {
+            if (Math.abs(arr[i] - arr[i + 1]) == 2) {
                 return "" + (arr[i] + arr[i + 1]) / 2;
             }
         }
-        return "null";
+        throw new IllegalArgumentException();
     }
 }
