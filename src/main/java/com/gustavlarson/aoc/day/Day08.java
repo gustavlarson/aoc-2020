@@ -18,6 +18,7 @@ public class Day08 implements Day {
     class Instruction {
         final Operation operation;
         final int argument;
+        boolean executed = false;
 
         Instruction(final Operation operation, final int argument) {
             this.operation = operation;
@@ -47,7 +48,24 @@ public class Day08 implements Day {
 
     @Override
     public long solvePart1() {
-        return 0;
+        int counter = 0;
+        int instructionPointer = 0;
+        while (true) {
+            final Instruction currentInstruction = input.get(instructionPointer);
+            if (currentInstruction.executed) {
+                break;
+            }
+            currentInstruction.executed = true;
+            switch (currentInstruction.operation) {
+                case NOP -> instructionPointer++;
+                case JMP -> instructionPointer += currentInstruction.argument;
+                case ACC -> {
+                    counter += currentInstruction.argument;
+                    instructionPointer++;
+                }
+            }
+        }
+        return counter;
     }
 
     @Override
