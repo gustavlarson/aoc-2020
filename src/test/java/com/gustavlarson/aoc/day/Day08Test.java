@@ -38,7 +38,7 @@ public class Day08Test {
                 jmp -4
                 acc +6""");
         final Day day = new Day08(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(8, day.solvePart2());
     }
 
 }

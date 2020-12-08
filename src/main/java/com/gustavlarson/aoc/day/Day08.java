@@ -11,12 +11,12 @@ public class Day08 implements Day {
 
     private static final Pattern pattern = Pattern.compile("(?<operation>nop|acc|jmp) (?<argument>\\+?-?\\d+)");
 
-    enum Operation {
-        NOP, ACC, JMP
-    }
+    static class Instruction {
+        enum Operation {
+            NOP, ACC, JMP
+        }
 
-    class Instruction {
-        Operation operation;
+        private Operation operation;
         final int argument;
         boolean executed = false;
 
@@ -43,31 +43,41 @@ public class Day08 implements Day {
         }
     }
 
+    static class Result {
+        final int accumulator;
+        final boolean infiniteLoop;
+
+        Result(final boolean infiniteLoop, final int accumulator) {
+            this.infiniteLoop = infiniteLoop;
+            this.accumulator = accumulator;
+        }
+    }
+
     private final List<Instruction> input;
 
     public Day08(final List<String> input) {
         this.input = input.stream().map(Instruction::new).collect(Collectors.toList());
     }
 
-    private long getAccumulator(final List<Instruction> input) {
-        int counter = 0;
+    private static Result executeInstructions(final List<Instruction> input) {
+        int accumulator = 0;
         int instructionPointer = 0;
         while (instructionPointer < input.size()) {
             final Instruction currentInstruction = input.get(instructionPointer);
             if (currentInstruction.executed) {
-                break;
+                return new Result(true, accumulator);
             }
             currentInstruction.executed = true;
             switch (currentInstruction.operation) {
                 case NOP -> instructionPointer++;
                 case JMP -> instructionPointer += currentInstruction.argument;
                 case ACC -> {
-                    counter += currentInstruction.argument;
+                    accumulator += currentInstruction.argument;
                     instructionPointer++;
                 }
             }
         }
-        return counter;
+        return new Result(false, accumulator);
     }
 
     private void reset() {
@@ -77,42 +87,23 @@ public class Day08 implements Day {
     @Override
     public long solvePart1() {
         reset();
-        return getAccumulator(input);
-    }
-
-    private boolean isInfiniteLoop(final List<Instruction> instructions) {
-        int counter = 0;
-        int instructionPointer = 0;
-        while (instructionPointer < instructions.size()) {
-            final Instruction currentInstruction = input.get(instructionPointer);
-            if (currentInstruction.executed) {
-                return true;
-            }
-            currentInstruction.executed = true;
-            switch (currentInstruction.operation) {
-                case NOP -> instructionPointer++;
-                case JMP -> instructionPointer += currentInstruction.argument;
-                case ACC -> {
-                    counter += currentInstruction.argument;
-                    instructionPointer++;
-                }
-            }
-        }
-        return false;
+        return executeInstructions(input).accumulator;
     }
 
     @Override
     public long solvePart2() {
-        for (var i = 0; i < input.size(); i++) {
-            reset();
-            input.get(i).flipOperation();
-            if (!isInfiniteLoop(input)) {
-                reset();
-                return getAccumulator(input);
-            }
-            input.get(i).flipOperation();
-        }
-        throw new IllegalStateException();
+        final Result validResult = input.stream()
+                .filter(instruction -> instruction.operation != Instruction.Operation.ACC)
+                .map(instruction -> {
+                    reset();
+                    instruction.flipOperation();
+                    final Result result = executeInstructions(input);
+                    instruction.flipOperation();
+                    return result;
+                })
+                .filter(result -> !result.infiniteLoop)
+                .findAny().orElseThrow();
+        return validResult.accumulator;
     }
 
 }
