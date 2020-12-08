@@ -3,6 +3,7 @@ package com.gustavlarson.aoc.day;
 import com.gustavlarson.aoc.Day;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -93,7 +94,7 @@ public class Day08 implements Day {
     @Override
     public long solvePart2() {
         final Result validResult = input.stream()
-                .filter(instruction -> instruction.operation != Instruction.Operation.ACC)
+                .filter(isSwappable())
                 .map(instruction -> {
                     reset();
                     instruction.flipOperation();
@@ -104,6 +105,10 @@ public class Day08 implements Day {
                 .filter(result -> !result.infiniteLoop)
                 .findAny().orElseThrow();
         return validResult.accumulator;
+    }
+
+    private static Predicate<Instruction> isSwappable() {
+        return instruction -> instruction.operation != Instruction.Operation.ACC;
     }
 
 }
