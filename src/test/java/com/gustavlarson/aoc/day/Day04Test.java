@@ -10,19 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day04Test {
     @Test
     public void testPart101() {
-        final Day day = new Day04();
         final List<String> input = List.of(
                 "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd",
                 "byr:1937 iyr:2017 cid:147 hgt:183cm", "",
                 "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884",
                 "hcl:#cfa07d byr:1929");
-        final String result = day.solvePart1(input);
-        assertEquals("1", result);
+        final Day day = new Day04(input);
+        assertEquals(1, day.solvePart1());
     }
 
     @Test
     public void testPart102() {
-        final Day day = new Day04();
         final List<String> input = List.of(
                 "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd",
                 "byr:1937 iyr:2017 cid:147 hgt:183cm",
@@ -36,13 +34,12 @@ public class Day04Test {
                 "",
                 "hcl:#cfa07d eyr:2025 pid:166559648",
                 "iyr:2011 ecl:brn hgt:59in");
-        final String result = day.solvePart1(input);
-        assertEquals("2", result);
+        final Day day = new Day04(input);
+        assertEquals(2, day.solvePart1());
     }
 
     @Test
     public void testPart201() {
-        final Day day = new Day04();
         final List<String> input = List.of(
                 "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980",
                 "hcl:#623a2f",
@@ -56,13 +53,12 @@ public class Day04Test {
                 "eyr:2022",
                 "",
                 "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719");
-        final String result = day.solvePart2(input);
-        assertEquals("4", result);
+        final Day day = new Day04(input);
+        assertEquals(4, day.solvePart2());
     }
 
     @Test
     public void testPart202() {
-        final Day day = new Day04();
         final List<String> input = List.of(
                 "eyr:1972 cid:100",
                 "hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926",
@@ -93,7 +89,8 @@ public class Day04Test {
                 "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2019 pid:093154719",
                 "",
                 "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:0931547199");
-        final String result = day.solvePart2(input);
-        assertEquals("0", result);
+        final Day day = new Day04(input);
+
+        assertEquals(0, day.solvePart2());
     }
 }

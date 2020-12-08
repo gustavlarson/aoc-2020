@@ -9,19 +9,25 @@ import java.util.stream.IntStream;
 
 public class Day06 implements Day {
 
+    private final List<String> input;
+
+    public Day06(final List<String> input) {
+        this.input = input;
+    }
+
     static long getNumberOfAnswersP1(final String input) {
         return input.chars().filter(c -> c >= 'a' && c <= 'z').distinct().count();
     }
 
     @Override
-    public String solvePart1(final List<String> input) {
+    public long solvePart1() {
         final long res = Arrays
                 .stream(splitIntoGroups(input))
                 .parallel()
                 .mapToLong(Day06::getNumberOfAnswersP1)
                 .sum();
 
-        return "" + res;
+        return res;
     }
 
     private static String[] splitIntoGroups(final List<String> input) {
@@ -29,14 +35,14 @@ public class Day06 implements Day {
     }
 
     @Override
-    public String solvePart2(final List<String> input) {
+    public long solvePart2() {
         final long res = Arrays
                 .stream(splitIntoGroups(input))
                 .parallel()
                 .mapToLong(Day06::getNumberOfAnswersP2)
                 .sum();
 
-        return "" + res;
+        return res;
     }
 
     private static long getNumberOfAnswersP2(final String input) {

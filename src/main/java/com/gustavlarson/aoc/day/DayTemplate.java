@@ -6,13 +6,19 @@ import java.util.List;
 
 public class DayTemplate implements Day {
 
-    @Override
-    public String solvePart1(final List<String> input) {
-        return null;
+    private final List<String> input;
+
+    public DayTemplate(final List<String> input) {
+        this.input = input;
     }
 
     @Override
-    public String solvePart2(final List<String> input) {
-        return null;
+    public long solvePart1() {
+        return 0;
+    }
+
+    @Override
+    public long solvePart2() {
+        return 0;
     }
 }

@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day01 implements Day {
+    private final List<Integer> expenses;
 
-    private static int solver(final List<String> input, final int count) {
-        final List<Integer> expenses = input.parallelStream().map(Integer::parseInt).collect(Collectors.toList());
+    public Day01(final List<String> input) {
+        expenses = input.parallelStream().map(Integer::parseInt).collect(Collectors.toList());
+    }
 
+    private int solver(final int count) {
         // Find the n (count) elements that adds to 2020
         final List<Integer> result = expenses.parallelStream().filter(
                 value -> recursiveMatcher(expenses, value, count)
@@ -29,12 +32,12 @@ public class Day01 implements Day {
     }
 
     @Override
-    public String solvePart1(final List<String> input) {
-        return "" + solver(input, 2);
+    public long solvePart1() {
+        return solver(2);
     }
 
     @Override
-    public String solvePart2(final List<String> input) {
-        return "" + solver(input, 3);
+    public long solvePart2() {
+        return solver(3);
     }
 }

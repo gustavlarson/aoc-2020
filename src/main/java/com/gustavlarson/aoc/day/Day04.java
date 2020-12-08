@@ -14,6 +14,12 @@ public class Day04 implements Day {
     private static final Pattern colorPattern = Pattern.compile("^#[0-9a-f]{6}$");
     private static final Pattern passportIdPattern = Pattern.compile("^[0-9]{9}$");
 
+    private final List<String> input;
+
+    public Day04(final List<String> input) {
+        this.input = input;
+    }
+
     static class Passport {
         String byr, iyr, eyr, hgt, hcl, ecl, pid;
 
@@ -108,16 +114,16 @@ public class Day04 implements Day {
     }
 
     @Override
-    public String solvePart1(final List<String> input) {
+    public long solvePart1() {
         final List<Passport> passports = getPassports(input);
 
-        return "" + passports.parallelStream().filter(Passport::hasAllRequiredFields).count();
+        return passports.parallelStream().filter(Passport::hasAllRequiredFields).count();
     }
 
     @Override
-    public String solvePart2(final List<String> input) {
+    public long solvePart2() {
         final List<Passport> passports = getPassports(input);
 
-        return "" + passports.parallelStream().filter(Passport::hasOnlyValidFields).count();
+        return passports.parallelStream().filter(Passport::hasOnlyValidFields).count();
     }
 }

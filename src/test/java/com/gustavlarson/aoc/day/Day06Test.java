@@ -10,41 +10,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day06Test {
     @Test
     public void testPart101() {
-        final Day day = new Day06();
         final List<String> input = List.of("abc");
-        final String result = day.solvePart1(input);
-        assertEquals("3", result);
+        final Day day = new Day06(input);
+        assertEquals(3, day.solvePart1());
     }
 
     @Test
     public void testPart102() {
-        final Day day = new Day06();
         final List<String> input = List.of("abc", "", "a", "b", "c");
-        final String result = day.solvePart1(input);
-        assertEquals("6", result);
+        final Day day = new Day06(input);
+        assertEquals(6, day.solvePart1());
     }
 
     @Test
     public void testPart103() {
-        final Day day = new Day06();
         final List<String> input = List.of("abc", "", "a", "b", "c", "", "ab", "ac", "", "a", "a", "a", "a", "", "b");
-        final String result = day.solvePart1(input);
-        assertEquals("11", result);
+        final Day day = new Day06(input);
+        assertEquals(11, day.solvePart1());
     }
 
     @Test
     public void testPart201() {
-        final Day day = new Day06();
         final List<String> input = List.of("abc");
-        final String result = day.solvePart2(input);
-        assertEquals("3", result);
+        final Day day = new Day06(input);
+        assertEquals(3, day.solvePart2());
     }
 
     @Test
     public void testPart202() {
-        final Day day = new Day06();
         final List<String> input = List.of("abc", "", "a", "b", "c");
-        final String result = day.solvePart2(input);
-        assertEquals("3", result);
+        final Day day = new Day06(input);
+        assertEquals(3, day.solvePart2());
     }
 }

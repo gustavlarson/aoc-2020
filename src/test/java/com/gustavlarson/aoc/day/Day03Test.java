@@ -5,49 +5,48 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.gustavlarson.aoc.day.TestHelper.getAsList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day03Test {
     @Test
     public void testPart101() {
-        final Day day = new Day03();
         final List<String> input = List.of("..##.......");
-        final String result = day.solvePart1(input);
-        assertEquals("0", result);
+        final Day day = new Day03(input);
+        assertEquals(0, day.solvePart1());
     }
 
     @Test
     public void testPart102() {
-        final Day day = new Day03();
         final List<String> input = List.of("..##.......", "#...#...#..");
-        final String result = day.solvePart1(input);
-        assertEquals("0", result);
+        final Day day = new Day03(input);
+        assertEquals(0, day.solvePart1());
     }
 
     @Test
     public void testPart103() {
-        final Day day = new Day03();
         final List<String> input = List.of("..##.......", "#...#...#..", ".#....#..#.");
-        final String result = day.solvePart1(input);
-        assertEquals("1", result);
+        final Day day = new Day03(input);
+        assertEquals(1, day.solvePart1());
     }
 
     @Test
     public void testPart201() {
-        final Day day = new Day03();
-        final List<String> input = List.of(
-                "..##.......",
-                "#...#...#..",
-                ".#....#..#.",
-                "..#.#...#.#",
-                ".#...##..#.",
-                "..#.##.....",
-                ".#.#.#....#",
-                ".#........#",
-                "#.##...#...",
-                "#...##....#",
-                ".#..#...#.#");
-        final String result = day.solvePart2(input);
-        assertEquals("336", result);
+        final List<String> input = getAsList("""
+                ..##.......
+                #...#...#..
+                .#....#..#.
+                ..#.#...#.#
+                .#...##..#.
+                ..#.##.....
+                .#.#.#....#
+                .#........#
+                #.##...#...
+                #...##....#
+                .#..#...#.#
+                                """);
+
+        final Day day = new Day03(input);
+        assertEquals(336, day.solvePart2());
     }
 }
