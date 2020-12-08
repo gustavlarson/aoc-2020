@@ -16,14 +16,9 @@ public class Day08 implements Day {
     }
 
     class Instruction {
-        final Operation operation;
+        Operation operation;
         final int argument;
         boolean executed = false;
-
-        Instruction(final Operation operation, final int argument) {
-            this.operation = operation;
-            this.argument = argument;
-        }
 
         Instruction(final String input) {
             final Matcher m = pattern.matcher(input);
@@ -38,6 +33,14 @@ public class Day08 implements Day {
             };
             argument = Integer.parseInt(m.group("argument"));
         }
+
+        void flipOperation() {
+            operation = switch (operation) {
+                case JMP -> Operation.NOP;
+                case NOP -> Operation.JMP;
+                default -> operation;
+            };
+        }
     }
 
     private final List<Instruction> input;
@@ -46,11 +49,10 @@ public class Day08 implements Day {
         this.input = input.stream().map(Instruction::new).collect(Collectors.toList());
     }
 
-    @Override
-    public long solvePart1() {
+    private long getAccumulator(final List<Instruction> input) {
         int counter = 0;
         int instructionPointer = 0;
-        while (true) {
+        while (instructionPointer < input.size()) {
             final Instruction currentInstruction = input.get(instructionPointer);
             if (currentInstruction.executed) {
                 break;
@@ -68,8 +70,49 @@ public class Day08 implements Day {
         return counter;
     }
 
+    private void reset() {
+        input.stream().parallel().forEach(instruction -> instruction.executed = false);
+    }
+
+    @Override
+    public long solvePart1() {
+        reset();
+        return getAccumulator(input);
+    }
+
+    private boolean isInfiniteLoop(final List<Instruction> instructions) {
+        int counter = 0;
+        int instructionPointer = 0;
+        while (instructionPointer < instructions.size()) {
+            final Instruction currentInstruction = input.get(instructionPointer);
+            if (currentInstruction.executed) {
+                return true;
+            }
+            currentInstruction.executed = true;
+            switch (currentInstruction.operation) {
+                case NOP -> instructionPointer++;
+                case JMP -> instructionPointer += currentInstruction.argument;
+                case ACC -> {
+                    counter += currentInstruction.argument;
+                    instructionPointer++;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public long solvePart2() {
-        return 0;
+        for (var i = 0; i < input.size(); i++) {
+            reset();
+            input.get(i).flipOperation();
+            if (!isInfiniteLoop(input)) {
+                reset();
+                return getAccumulator(input);
+            }
+            input.get(i).flipOperation();
+        }
+        throw new IllegalStateException();
     }
+
 }
