@@ -9,7 +9,6 @@ public class Day09 implements Day {
 
     private final List<Long> input;
     private static final int PREAMBLE_LENGTH = 25;
-    private static final long WEAKNESS = 26796446;
 
     public Day09(final List<String> input) {
         this.input = input.stream().map(Long::parseLong).collect(Collectors.toList());
@@ -34,6 +33,7 @@ public class Day09 implements Day {
 
     @Override
     public long solvePart2() {
+        final long weakness = solvePart1();
         for (var i = 0; i < input.size(); i++) {
             long min = Integer.MAX_VALUE;
             long max = Integer.MIN_VALUE;
@@ -43,7 +43,7 @@ public class Day09 implements Day {
                 if (value < min) min = value;
                 if (value > max) max = value;
                 sum += value;
-                if (sum == WEAKNESS) {
+                if (sum == weakness) {
                     return min + max;
                 }
             }
