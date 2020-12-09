@@ -17,9 +17,9 @@ public class Day09 implements Day {
     @Override
     public long solvePart1() {
         OUTER:
-        for (var i = 25; i < input.size(); i++) {
-            for (var j = 1; j < PREAMBLE_LENGTH + 1; j++) {
-                for (var k = 1; k < PREAMBLE_LENGTH + 1; k++) {
+        for (var i = PREAMBLE_LENGTH; i < input.size(); i++) {
+            for (var j = 1; j <= PREAMBLE_LENGTH; j++) {
+                for (var k = 1; k <= PREAMBLE_LENGTH; k++) {
                     if (j == k) continue;
                     if (input.get(i - j) + input.get(i - k) == input.get(i)) {
                         continue OUTER;
@@ -38,11 +38,12 @@ public class Day09 implements Day {
             long min = Integer.MAX_VALUE;
             long max = Integer.MIN_VALUE;
             long sum = 0;
+
             for (var j = i; j < input.size(); j++) {
                 final var value = input.get(j);
+                sum += value;
                 if (value < min) min = value;
                 if (value > max) max = value;
-                sum += value;
                 if (sum == weakness) {
                     return min + max;
                 }
