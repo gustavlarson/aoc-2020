@@ -11,9 +11,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day09Test {
     @Test
     public void testPart101() {
-        final List<String> input = List.of("1", "2");
+        final List<String> input = getAsList("""
+                1
+                2
+                3
+                4
+                5
+                6
+                7
+                8
+                9
+                10
+                11
+                12
+                13
+                14
+                15
+                16
+                17
+                18
+                19
+                20
+                21
+                22
+                23
+                24
+                25
+                26
+                50
+                99""");
         final Day day = new Day09(input);
-        assertEquals(0, day.solvePart1());
+        assertEquals(99, day.solvePart1());
     }
 
     @Test
