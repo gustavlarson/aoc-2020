@@ -47,9 +47,26 @@ public class Day09Test {
     @Test
     public void testPart201() {
         final List<String> input = getAsList("""
-                1
-                2
-                """);
+                35
+                20
+                15
+                25
+                47
+                40
+                62
+                55
+                65
+                95
+                102
+                117
+                150
+                182
+                127
+                219
+                299
+                277
+                309
+                576""");
         final Day day = new Day09(input);
         assertEquals(0, day.solvePart2());
     }
