@@ -2,6 +2,7 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,28 +13,19 @@ public class Day10 implements Day {
 
     public Day10(final List<String> input) {
         this.input = input.stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
-        this.input.add(0, 0);
+        this.input.add(0, 0); // Add start outlet
+        this.input.add(this.input.size(), this.input.get(this.input.size() - 1) + 3); //Add built-in adapter
     }
 
     @Override
     public long solvePart1() {
-        var one = 0;
-        var three = 1; // Start with one
+        final List<Integer> diffs = new ArrayList<>();
         for (var i = 1; i < input.size(); i++) {
-            switch (input.get(i) - input.get(i - 1)) {
-                case 1:
-                    one++;
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    three++;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-            }
+            diffs.add(input.get(i) - input.get(i - 1));
         }
-        return one * three;
+        final var ones = diffs.stream().filter(i -> i == 1).count();
+        final var threes = diffs.stream().filter(i -> i == 3).count();
+        return ones * threes;
     }
 
     @Override
