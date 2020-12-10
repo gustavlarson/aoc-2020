@@ -17,6 +17,7 @@ public class DayFactory {
             case 7 -> new Day07(input);
             case 8 -> new Day08(input);
             case 9 -> new Day09(input);
+            case 10 -> new Day10(input);
             default -> throw new IllegalArgumentException("Day not found");
         };
 
