@@ -29,11 +29,18 @@ public class Day11Test {
     @Test
     public void testPart201() {
         final List<String> input = getAsList("""
-                1
-                2
-                """);
+                L.LL.LL.LL
+                LLLLLLL.LL
+                L.L.L..L..
+                LLLL.LL.LL
+                L.LL.LL.LL
+                L.LLLLL.LL
+                ..L.L.....
+                LLLLLLLLLL
+                L.LLLLLL.L
+                L.LLLLL.LL""");
         final Day day = new Day11(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(26, day.solvePart2());
     }
 
 }

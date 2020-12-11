@@ -36,17 +36,16 @@ public class Day11 implements Day {
     @Override
     public long solvePart1() {
         var previousState = inputState;
-        int i = 0;
-        System.out.println("Iteration " + ++i);
-        print(inputState);
+        final int i = 0;
+        //System.out.println("Iteration " + ++i);
+        //print(inputState);
         while (true) {
-            final State[][] nextState = computeNextState(previousState);
-            System.out.println("Iteration " + ++i);
-            print(nextState);
+            final State[][] nextState = computeNextState(previousState, 4, 1);
+            //System.out.println("Iteration " + ++i);
+            //print(nextState);
             if (compareState(previousState, nextState)) {
                 break;
             }
-            //if (i == 3) break;
             previousState = nextState;
         }
 
@@ -68,14 +67,14 @@ public class Day11 implements Day {
         return true;
     }
 
-    private static State[][] computeNextState(final State[][] previousState) {
+    private static State[][] computeNextState(final State[][] previousState, final int maxSeats, final int maxLos) {
         final State[][] nextState = new State[previousState.length][previousState[0].length];
-        for (var i = 0; i < previousState.length; i++) {
-            for (var j = 0; j < previousState[i].length; j++) {
-                nextState[i][j] = switch (previousState[i][j]) {
+        for (var x = 0; x < previousState.length; x++) {
+            for (var y = 0; y < previousState[x].length; y++) {
+                nextState[x][y] = switch (previousState[x][y]) {
                     case FLOOR -> State.FLOOR;
-                    case EMPTY -> allSurroundingSeatsEmpty(previousState, i, j) ? State.OCCUPIED : State.EMPTY;
-                    case OCCUPIED -> tooManySurroundingSeatsOccupied(previousState, i, j) ? State.EMPTY : State.OCCUPIED;
+                    case EMPTY -> allSurroundingSeatsEmpty(previousState, x, y, maxLos) ? State.OCCUPIED : State.EMPTY;
+                    case OCCUPIED -> tooManySurroundingSeatsOccupied(previousState, x, y, maxSeats, maxLos) ? State.EMPTY : State.OCCUPIED;
                 };
             }
         }
@@ -83,63 +82,103 @@ public class Day11 implements Day {
         return nextState;
     }
 
-    private static boolean tooManySurroundingSeatsOccupied(final State[][] previousState, final int i, final int j) {
-        var count = 0;
-        if (i - 1 >= 0) {
-            if (j - 1 >= 0) {
-                if (previousState[i - 1][j - 1] == State.OCCUPIED) count++;
+    private static boolean tooManySurroundingSeatsOccupied(final State[][] previousState, final int x, final int y, final int maxSeats, final int maxLos) {
+        final State[] seatFound = {null, null, null, null, null, null, null, null};
+        for (var i = 1; i <= maxLos; i++) {
+            if (x - i >= 0) {
+                if (seatFound[0] == null && y - i >= 0) {
+                    if (previousState[x - i][y - i] != State.FLOOR)
+                        seatFound[0] = previousState[x - i][y - i];
+                }
+                if (seatFound[1] == null && previousState[x - i][y] != State.FLOOR)
+                    seatFound[1] = previousState[x - i][y];
+                if (seatFound[2] == null && y + i < previousState[x - i].length) {
+                    if (previousState[x - i][y + i] != State.FLOOR) seatFound[2] = previousState[x - i][y + i];
+                }
             }
-            if (previousState[i - 1][j] == State.OCCUPIED) count++;
-            if (j + 1 < previousState[i - 1].length) {
-                if (previousState[i - 1][j + 1] == State.OCCUPIED) count++;
+            if (seatFound[3] == null && y - i >= 0) {
+                if (previousState[x][y - i] != State.FLOOR) seatFound[3] = previousState[x][y - i];
             }
-        }
-        if (j - 1 >= 0) {
-            if (previousState[i][j - 1] == State.OCCUPIED) count++;
-        }
-        if (j + 1 < previousState[i].length) {
-            if (previousState[i][j + 1] == State.OCCUPIED) count++;
-        }
-        if (i + 1 < previousState.length) {
-            if (j - 1 >= 0) {
-                if (previousState[i + 1][j - 1] == State.OCCUPIED) count++;
+            if (seatFound[4] == null && y + i < previousState[x].length) {
+                if (previousState[x][y + i] != State.FLOOR) seatFound[4] = previousState[x][y + i];
             }
-            if (previousState[i + 1][j] == State.OCCUPIED) count++;
-            if (j + 1 < previousState[i + 1].length) {
-                if (previousState[i + 1][j + 1] == State.OCCUPIED) count++;
+            if (x + i < previousState.length) {
+                if (seatFound[5] == null && y - i >= 0) {
+                    if (previousState[x + i][y - i] != State.FLOOR) seatFound[5] = previousState[x + i][y - i];
+                }
+                if (seatFound[6] == null && previousState[x + i][y] != State.FLOOR)
+                    seatFound[6] = previousState[x + i][y];
+                if (seatFound[7] == null && y + i < previousState[x + i].length) {
+                    if (previousState[x + i][y + i] != State.FLOOR) seatFound[7] = previousState[x + i][y + i];
+                }
             }
         }
 
-        return count >= 4;
+        return Arrays.stream(seatFound).filter(b -> b == State.OCCUPIED).count() >= maxSeats;
     }
 
-    private static boolean allSurroundingSeatsEmpty(final State[][] previousState, final int i, final int j) {
-        if (i - 1 >= 0) {
-            if (j - 1 >= 0) {
-                if (previousState[i - 1][j - 1] == State.OCCUPIED) return false;
+    private static boolean allSurroundingSeatsEmpty(final State[][] previousState, final int x, final int y, final int maxLos) {
+//        final State[] seatFound = {null, null, null, null, null, null, null, null};
+//        for (var i = 1; i <= maxLos; i++) {
+//            if (x - i >= 0) {
+//                if (seatFound[0] == null && y - i >= 0) {
+//                    if (previousState[x - i][y - i] == State.OCCUPIED) return false;
+//                }
+//                if (seatFound[1] == null && previousState[x - i][y] == State.OCCUPIED) return false;
+//                if (seatFound[2] == null && y + i < previousState[x - i].length) {
+//                    if (previousState[x - i][y + i] == State.OCCUPIED) return false;
+//                }
+//            }
+//            if (seatFound[3] == null && y - i >= 0) {
+//                if (previousState[x][y - i] == State.OCCUPIED) return false;
+//            }
+//            if (seatFound[4] == null && y + i < previousState[x].length) {
+//                if (previousState[x][y + i] == State.OCCUPIED) return false;
+//            }
+//            if (x + i < previousState.length) {
+//                if (seatFound[5] == null && y - i >= 0) {
+//                    if (previousState[x + i][y - i] == State.OCCUPIED) return false;
+//                }
+//                if (seatFound[6] == null && previousState[x + i][y] == State.OCCUPIED) return false;
+//                if (seatFound[7] == null && y + i < previousState[x + i].length) {
+//                    if (previousState[x + i][y + i] == State.OCCUPIED) return false;
+//                }
+//            }
+//        }
+//
+//        return true;
+        final State[] seatFound = {null, null, null, null, null, null, null, null};
+        for (var i = 1; i <= maxLos; i++) {
+            if (x - i >= 0) {
+                if (seatFound[0] == null && y - i >= 0) {
+                    if (previousState[x - i][y - i] != State.FLOOR)
+                        seatFound[0] = previousState[x - i][y - i];
+                }
+                if (seatFound[1] == null && previousState[x - i][y] != State.FLOOR)
+                    seatFound[1] = previousState[x - i][y];
+                if (seatFound[2] == null && y + i < previousState[x - i].length) {
+                    if (previousState[x - i][y + i] != State.FLOOR) seatFound[2] = previousState[x - i][y + i];
+                }
             }
-            if (previousState[i - 1][j] == State.OCCUPIED) return false;
-            if (j + 1 < previousState[i - 1].length) {
-                if (previousState[i - 1][j + 1] == State.OCCUPIED) return false;
+            if (seatFound[3] == null && y - i >= 0) {
+                if (previousState[x][y - i] != State.FLOOR) seatFound[3] = previousState[x][y - i];
             }
-        }
-        if (j - 1 >= 0) {
-            if (previousState[i][j - 1] == State.OCCUPIED) return false;
-        }
-        if (j + 1 < previousState[i].length) {
-            if (previousState[i][j + 1] == State.OCCUPIED) return false;
-        }
-        if (i + 1 < previousState.length) {
-            if (j - 1 >= 0) {
-                if (previousState[i + 1][j - 1] == State.OCCUPIED) return false;
+            if (seatFound[4] == null && y + i < previousState[x].length) {
+                if (previousState[x][y + i] != State.FLOOR) seatFound[4] = previousState[x][y + i];
             }
-            if (previousState[i + 1][j] == State.OCCUPIED) return false;
-            if (j + 1 < previousState[i + 1].length) {
-                if (previousState[i + 1][j + 1] == State.OCCUPIED) return false;
+            if (x + i < previousState.length) {
+                if (seatFound[5] == null && y - i >= 0) {
+                    if (previousState[x + i][y - i] != State.FLOOR) seatFound[5] = previousState[x + i][y - i];
+                }
+                if (seatFound[6] == null && previousState[x + i][y] != State.FLOOR)
+                    seatFound[6] = previousState[x + i][y];
+                if (seatFound[7] == null && y + i < previousState[x + i].length) {
+                    if (previousState[x + i][y + i] != State.FLOOR) seatFound[7] = previousState[x + i][y + i];
+                }
             }
         }
 
-        return true;
+        return Arrays.stream(seatFound).allMatch(b -> b == State.EMPTY || b == null);
     }
 
     private static void print(final State[][] state) {
@@ -151,6 +190,22 @@ public class Day11 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        var previousState = inputState;
+        final int i = 0;
+        //System.out.println("Iteration " + ++i);
+        print(inputState);
+        final var maxLos = Math.max(inputState.length, inputState[0].length);
+        while (true) {
+            final State[][] nextState = computeNextState(previousState, 5, maxLos);
+            //System.out.println("Iteration " + ++i);
+            print(nextState);
+            if (compareState(previousState, nextState)) {
+                break;
+            }
+            // if (i == 4) break;
+            previousState = nextState;
+        }
+
+        return countOccupiedSeats(previousState);
     }
 }
