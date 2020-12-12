@@ -193,12 +193,12 @@ public class Day11 implements Day {
         var previousState = inputState;
         final int i = 0;
         //System.out.println("Iteration " + ++i);
-        print(inputState);
+        //print(inputState);
         final var maxLos = Math.max(inputState.length, inputState[0].length);
         while (true) {
             final State[][] nextState = computeNextState(previousState, 5, maxLos);
             //System.out.println("Iteration " + ++i);
-            print(nextState);
+            //print(nextState);
             if (compareState(previousState, nextState)) {
                 break;
             }
