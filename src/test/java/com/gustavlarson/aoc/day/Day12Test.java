@@ -34,11 +34,25 @@ public class Day12Test {
     @Test
     public void testPart201() {
         final List<String> input = getAsList("""
-                1
-                2
-                """);
+                F10
+                N3
+                F7
+                R90
+                F11""");
         final Day day = new Day12(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(286, day.solvePart2());
+    }
+
+    @Test
+    public void testPart202() {
+        final List<String> input = getAsList("""
+                F10
+                N3
+                F7
+                L270
+                F11""");
+        final Day day = new Day12(input);
+        assertEquals(286, day.solvePart2());
     }
 
 }

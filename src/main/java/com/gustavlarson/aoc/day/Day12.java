@@ -70,6 +70,36 @@ public class Day12 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        long shipX = 0;
+        long shipY = 0;
+        long waypointX = 10;
+        long waypointY = 1;
+        for (final var instruction : input) {
+            switch (instruction.action) {
+                case NORTH -> waypointY += instruction.value;
+                case SOUTH -> waypointY -= instruction.value;
+                case EAST -> waypointX += instruction.value;
+                case WEST -> waypointX -= instruction.value;
+                case FORWARD -> {
+                    shipX += waypointX * instruction.value;
+                    shipY += waypointY * instruction.value;
+                }
+                case RIGHT -> {
+                    for (var i = 0; i < instruction.value / 90; i++) {
+                        var tmp = -waypointX;
+                        waypointX = waypointY;
+                        waypointY = tmp;
+                    }
+                }
+                case LEFT -> {
+                    for (var i = 0; i < instruction.value / 90; i++) {
+                        var tmp = waypointX;
+                        waypointX = -waypointY;
+                        waypointY = tmp;
+                    }
+                }
+            }
+        }
+        return Math.abs(shipX) + Math.abs(shipY);
     }
 }
