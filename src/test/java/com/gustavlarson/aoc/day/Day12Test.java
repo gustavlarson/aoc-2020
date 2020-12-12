@@ -11,9 +11,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day12Test {
     @Test
     public void testPart101() {
-        final List<String> input = List.of("1", "2");
-        final Day day = new DayTemplate(input);
-        assertEquals(0, day.solvePart1());
+        final List<String> input = getAsList("""
+                F10
+                N3
+                F7""");
+        final Day day = new Day12(input);
+        assertEquals(20, day.solvePart1());
+    }
+
+    @Test
+    public void testPart102() {
+        final List<String> input = getAsList("""
+                F10
+                N3
+                F7
+                R90
+                F11""");
+        final Day day = new Day12(input);
+        assertEquals(25, day.solvePart1());
     }
 
     @Test
@@ -22,7 +37,7 @@ public class Day12Test {
                 1
                 2
                 """);
-        final Day day = new DayTemplate(input);
+        final Day day = new Day12(input);
         assertEquals(0, day.solvePart2());
     }
 
