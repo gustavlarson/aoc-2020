@@ -32,6 +32,22 @@ public class Day13 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        long timestamp = 0;
+        long stride = 1;
+        for (var offset = 0; offset < busNumbers.size(); offset++) {
+            try {
+                final int bus = Integer.parseInt(busNumbers.get(offset));
+
+                while ((timestamp + offset) % bus != 0) {
+                    timestamp += stride;
+                }
+
+                stride *= bus;
+            } catch (NumberFormatException ignored) {
+
+            }
+
+        }
+        return timestamp;
     }
 }
