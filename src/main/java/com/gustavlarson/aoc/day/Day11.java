@@ -161,6 +161,7 @@ public class Day11 implements Day {
     @Override
     public long solvePart2() {
         var previousState = inputState;
+
         final var maxLos = Math.max(inputState.length, inputState[0].length) - 1;
         while (true) {
             final State[][] nextState = computeNextState(previousState, 5, maxLos);
