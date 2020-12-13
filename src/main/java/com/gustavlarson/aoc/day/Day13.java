@@ -20,7 +20,7 @@ public class Day13 implements Day {
         List<Integer> buses = busNumbers.stream().filter(line -> !line.equals("x")).map(Integer::parseInt).collect(Collectors.toList());
         var minWait = Integer.MAX_VALUE;
         var minBus = 0;
-        for (Integer bus : buses) {
+        for (var bus : buses) {
             var waitTime = bus - (timeToLeave % bus);
             if (waitTime < minWait) {
                 minWait = waitTime;
@@ -44,7 +44,6 @@ public class Day13 implements Day {
 
                 stride *= bus;
             } catch (NumberFormatException ignored) {
-
             }
 
         }
