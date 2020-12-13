@@ -4,12 +4,12 @@ import com.gustavlarson.aoc.Day;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Day11 implements Day {
 
     enum State {
         EMPTY('L'), OCCUPIED('#'), FLOOR('.');
-
         private final char icon;
 
         State(final char c) {
@@ -36,13 +36,10 @@ public class Day11 implements Day {
     @Override
     public long solvePart1() {
         var previousState = inputState;
-        final int i = 0;
-        //System.out.println("Iteration " + ++i);
-        //print(inputState);
+
         while (true) {
             final State[][] nextState = computeNextState(previousState, 4, 1);
-            //System.out.println("Iteration " + ++i);
-            //print(nextState);
+
             if (compareState(previousState, nextState)) {
                 break;
             }
@@ -57,9 +54,9 @@ public class Day11 implements Day {
     }
 
     private static boolean compareState(final State[][] previousState, final State[][] nextState) {
-        for (var i = 0; i < previousState.length; i++) {
-            for (var j = 0; j < previousState[i].length; j++) {
-                if (previousState[i][j] != nextState[i][j]) {
+        for (var x = 0; x < previousState.length; x++) {
+            for (var y = 0; y < previousState[x].length; y++) {
+                if (previousState[x][y] != nextState[x][y]) {
                     return false;
                 }
             }
@@ -112,41 +109,13 @@ public class Day11 implements Day {
                     if (previousState[x + i][y + i] != State.FLOOR) seatFound[7] = previousState[x + i][y + i];
                 }
             }
+            if (Arrays.stream(seatFound).allMatch(Objects::nonNull)) break;
         }
 
         return Arrays.stream(seatFound).filter(b -> b == State.OCCUPIED).count() >= maxSeats;
     }
 
     private static boolean allSurroundingSeatsEmpty(final State[][] previousState, final int x, final int y, final int maxLos) {
-//        final State[] seatFound = {null, null, null, null, null, null, null, null};
-//        for (var i = 1; i <= maxLos; i++) {
-//            if (x - i >= 0) {
-//                if (seatFound[0] == null && y - i >= 0) {
-//                    if (previousState[x - i][y - i] == State.OCCUPIED) return false;
-//                }
-//                if (seatFound[1] == null && previousState[x - i][y] == State.OCCUPIED) return false;
-//                if (seatFound[2] == null && y + i < previousState[x - i].length) {
-//                    if (previousState[x - i][y + i] == State.OCCUPIED) return false;
-//                }
-//            }
-//            if (seatFound[3] == null && y - i >= 0) {
-//                if (previousState[x][y - i] == State.OCCUPIED) return false;
-//            }
-//            if (seatFound[4] == null && y + i < previousState[x].length) {
-//                if (previousState[x][y + i] == State.OCCUPIED) return false;
-//            }
-//            if (x + i < previousState.length) {
-//                if (seatFound[5] == null && y - i >= 0) {
-//                    if (previousState[x + i][y - i] == State.OCCUPIED) return false;
-//                }
-//                if (seatFound[6] == null && previousState[x + i][y] == State.OCCUPIED) return false;
-//                if (seatFound[7] == null && y + i < previousState[x + i].length) {
-//                    if (previousState[x + i][y + i] == State.OCCUPIED) return false;
-//                }
-//            }
-//        }
-//
-//        return true;
         final State[] seatFound = {null, null, null, null, null, null, null, null};
         for (var i = 1; i <= maxLos; i++) {
             if (x - i >= 0) {
@@ -176,6 +145,7 @@ public class Day11 implements Day {
                     if (previousState[x + i][y + i] != State.FLOOR) seatFound[7] = previousState[x + i][y + i];
                 }
             }
+            if (Arrays.stream(seatFound).allMatch(Objects::nonNull)) break;
         }
 
         return Arrays.stream(seatFound).allMatch(b -> b == State.EMPTY || b == null);
@@ -191,18 +161,13 @@ public class Day11 implements Day {
     @Override
     public long solvePart2() {
         var previousState = inputState;
-        final int i = 0;
-        //System.out.println("Iteration " + ++i);
-        //print(inputState);
-        final var maxLos = Math.max(inputState.length, inputState[0].length);
+
+        final var maxLos = Math.max(inputState.length, inputState[0].length) - 1;
         while (true) {
             final State[][] nextState = computeNextState(previousState, 5, maxLos);
-            //System.out.println("Iteration " + ++i);
-            //print(nextState);
             if (compareState(previousState, nextState)) {
                 break;
             }
-            // if (i == 4) break;
             previousState = nextState;
         }
 
