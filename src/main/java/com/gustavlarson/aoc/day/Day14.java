@@ -39,7 +39,7 @@ public class Day14 implements Day {
         String mask = "";
         for (var line : input) {
             if (line.contains("mask")) {
-                mask = input.get(0).split(" ")[2];
+                mask = line.split(" ")[2];
             } else {
                 Op op = getOp(line);
                 memory.put(op.address, mask(mask, op.value));

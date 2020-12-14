@@ -30,6 +30,17 @@ public class Day14Test {
         assertEquals(30157310144L + 30157310176L, day.solvePart1());
     }
 
+    @Test
+    public void testPart103() {
+        final List<String> input = getAsList("""
+                mask = X111000X0101100001000000100011X0000X
+                mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+                mem[8] = 11
+                mem[7] = 101
+                mem[8] = 0""");
+        final Day day = new Day14(input);
+        assertEquals(165, day.solvePart1());
+    }
 
     @Test
     public void testPart201() {
