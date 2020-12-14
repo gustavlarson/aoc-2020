@@ -2,6 +2,7 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,46 @@ public class Day14 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        Map<Long, Long> memory = new HashMap<>();
+        String mask = "";
+        for (var line : input) {
+            if (line.contains("mask")) {
+                mask = line.split(" ")[2];
+            } else {
+                Op op = getOp(line);
+                String maskedAddress = getMaskedAddress(mask, op.address);
+                List<String> addresses = new ArrayList<>();
+                generateAddresses(maskedAddress, addresses);
+                for (var address : addresses) {
+                    memory.put(Long.parseLong(address, 2), op.value);
+                }
+            }
+        }
+        return memory.values().stream().mapToLong(Long::longValue).sum();
+    }
+
+    private static String getMaskedAddress(String mask, Long address) {
+
+        char[] addressChars = Long.toBinaryString(address).toCharArray();
+        char[] maskChars = mask.toCharArray();
+        for (int i = 0; i < maskChars.length; i++) {
+            char c = maskChars[maskChars.length - i - 1];
+            if (c == '0') {
+                maskChars[maskChars.length - i - 1] = (addressChars.length - i - 1 >= 0) ? addressChars[addressChars.length - i - 1] : '0';
+            }
+        }
+
+
+        return String.valueOf(maskChars);
+    }
+
+    private static void generateAddresses(String mask, List<String> addresses) {
+        if (!mask.contains("X")) {
+            addresses.add(mask);
+            return;
+        }
+
+        generateAddresses(mask.replaceFirst("X", "1"), addresses);
+        generateAddresses(mask.replaceFirst("X", "0"), addresses);
     }
 }

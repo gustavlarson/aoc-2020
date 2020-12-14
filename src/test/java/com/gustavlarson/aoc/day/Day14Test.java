@@ -45,12 +45,12 @@ public class Day14Test {
     @Test
     public void testPart201() {
         final List<String> input = getAsList("""
-                mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-                mem[8] = 11
-                mem[7] = 101
-                mem[8] = 0""");
+                mask = 000000000000000000000000000000X1001X
+                mem[42] = 100
+                mask = 00000000000000000000000000000000X0XX
+                mem[26] = 1""");
         final Day day = new Day14(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(208, day.solvePart2());
     }
 
 }
