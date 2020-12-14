@@ -21,6 +21,17 @@ public class Day14Test {
     }
 
     @Test
+    public void testPart102() {
+        final List<String> input = getAsList("""
+                mask = X111000X0101100001000000100011X0000X
+                mem[4812] = 133322396
+                mem[39136] = 1924962""");
+        final Day day = new Day14(input);
+        assertEquals(30157310144L + 30157310176L, day.solvePart1());
+    }
+
+
+    @Test
     public void testPart201() {
         final List<String> input = getAsList("""
                 mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X

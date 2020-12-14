@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Day14 implements Day {
 
@@ -22,18 +21,10 @@ public class Day14 implements Day {
     }
 
     private final List<String> input;
-    private final List<Op> writes;
-    private final String mask;
     private static final Pattern pattern = Pattern.compile("mem\\[(\\d+)\\] = (\\d+)");
 
     public Day14(final List<String> input) {
         this.input = input;
-        this.mask = input.get(0).split(" ")[2];
-        this.writes = input.stream().skip(1).map(line -> {
-            Matcher m = pattern.matcher(line);
-            if (!m.find()) throw new IllegalArgumentException();
-            return new Op(Long.parseLong(m.group(1)), Long.parseLong(m.group(2)));
-        }).collect(Collectors.toList());
     }
 
     private Op getOp(String line) {
@@ -61,11 +52,11 @@ public class Day14 implements Day {
         for (var i = 0; i < mask.length(); i++) {
             var pos = mask.length() - i - 1;
             switch (mask.substring(i, i + 1)) {
-                case "0" -> value &= ~(1 << pos);
-                case "1" -> value |= 1 << pos;
+                case "0" -> value &= ~(1L << pos);
+                case "1" -> value |= 1L << pos;
             }
         }
-        return value;
+        return value & 0xFFFFFFFFFL;
     }
 
     @Override
