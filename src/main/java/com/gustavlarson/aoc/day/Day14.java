@@ -64,6 +64,7 @@ public class Day14 implements Day {
     public long solvePart2() {
         Map<Long, Long> memory = new HashMap<>();
         String mask = "";
+
         for (var line : input) {
             if (line.contains("mask")) {
                 mask = line.split(" ")[2];
@@ -77,6 +78,7 @@ public class Day14 implements Day {
                 }
             }
         }
+
         return memory.values().stream().mapToLong(Long::longValue).sum();
     }
 
@@ -90,7 +92,6 @@ public class Day14 implements Day {
                 maskChars[maskChars.length - i - 1] = (addressChars.length - i - 1 >= 0) ? addressChars[addressChars.length - i - 1] : '0';
             }
         }
-
 
         return String.valueOf(maskChars);
     }
