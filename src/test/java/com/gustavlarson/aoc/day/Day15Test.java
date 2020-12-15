@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.gustavlarson.aoc.day.TestHelper.getAsList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day15Test {
@@ -40,12 +39,9 @@ public class Day15Test {
 
     @Test
     public void testPart201() {
-        final List<String> input = getAsList("""
-                1
-                2
-                """);
+        final List<String> input = List.of("0,3,6");
         final Day day = new Day15(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(175594, day.solvePart2());
     }
 
 }

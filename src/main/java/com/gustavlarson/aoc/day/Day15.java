@@ -3,7 +3,9 @@ package com.gustavlarson.aoc.day;
 import com.gustavlarson.aoc.Day;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Day15 implements Day {
@@ -44,6 +46,22 @@ public class Day15 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        //30000000
+        Map<Long, Long> cache = new HashMap<>();
+        for (var i = 0; i < input.size(); i++) {
+            cache.put(input.get(i), (long) i);
+        }
+        var nextNumber = input.get(input.size() - 1);
+        for (var i = input.size(); i < 30000000; i++) {
+            if (!cache.containsKey(nextNumber)) {
+                cache.put(nextNumber, (long) (i - 1));
+                nextNumber = 0L;
+            } else {
+                var diff = (i - 1) - cache.get(nextNumber);
+                cache.put(nextNumber, (long) (i - 1));
+                nextNumber = diff;
+            }
+        }
+        return nextNumber;
     }
 }
