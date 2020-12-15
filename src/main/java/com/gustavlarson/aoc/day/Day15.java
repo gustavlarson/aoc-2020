@@ -23,7 +23,7 @@ public class Day15 implements Day {
         for (var i = input.size(); i < rounds.length; i++) {
             var lastNumber = rounds[i - 1];
             long nextNumber;
-            if (Arrays.stream(rounds).filter(num -> num == lastNumber).count() == 1) {
+            if (Arrays.stream(rounds).limit(i).filter(num -> num == lastNumber).count() <= 1) {
                 nextNumber = 0;
             } else {
                 long lastOccurrance = lastOccurrance(rounds, lastNumber, i);

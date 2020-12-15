@@ -24,6 +24,21 @@ public class Day15Test {
     }
 
     @Test
+    public void testPart103() {
+        final List<String> input = List.of("2,1,3");
+        final Day day = new Day15(input);
+        assertEquals(10, day.solvePart1());
+    }
+
+    @Test
+    public void testPart104() {
+        final List<String> input = List.of("1,2,3");
+        final Day day = new Day15(input);
+        assertEquals(27, day.solvePart1());
+    }
+
+
+    @Test
     public void testPart201() {
         final List<String> input = getAsList("""
                 1
