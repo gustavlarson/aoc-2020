@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.gustavlarson.aoc.day.TestHelper.getAsList;
+import static com.gustavlarson.aoc.day.TestHelper.getFromFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day14Test {
@@ -53,4 +54,17 @@ public class Day14Test {
         assertEquals(208, day.solvePart2());
     }
 
+    @Test
+    public void testPart1Real() {
+        final List<String> input = getFromFile(14);
+        final Day day = new Day14(input);
+        assertEquals(8570568288597L, day.solvePart1());
+    }
+
+    @Test
+    public void testPart2Real() {
+        final List<String> input = getFromFile(14);
+        final Day day = new Day14(input);
+        assertEquals(3289441921203L, day.solvePart2());
+    }
 }
