@@ -3,6 +3,7 @@ package com.gustavlarson.aoc.day;
 import com.gustavlarson.aoc.Day;
 
 import java.util.*;
+import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -56,9 +57,18 @@ public class Day16 implements Day {
         nearbyTickets = input.stream().dropWhile(line -> line.length() > 0).skip(5).map(Ticket::new).collect(Collectors.toList());
     }
 
+    private ToIntFunction<Ticket> sumOfInvalidFields() {
+        return ticket -> ticket.fields.stream()
+                .mapToInt(Integer::intValue)
+                .filter(value -> !isValid(value))
+                .sum();
+    }
+
     @Override
     public long solvePart1() {
-        return nearbyTickets.stream().mapToInt(ticket -> ticket.fields.stream().mapToInt(Integer::intValue).filter(value -> !isValid(value)).sum()).sum();
+        return nearbyTickets.stream().parallel()
+                .mapToInt(sumOfInvalidFields())
+                .sum();
     }
 
     private boolean isValid(int value) {
@@ -75,27 +85,46 @@ public class Day16 implements Day {
         return false;
     }
 
+    private boolean isValid(Ticket ticket) {
+        return ticket.fields.stream().mapToInt(Integer::intValue).allMatch(this::isValid);
+    }
+
     @Override
     public long solvePart2() {
-        List<Ticket> validTickets = nearbyTickets.stream().filter(this::isValid).collect(Collectors.toList());
+        var validTickets = nearbyTickets.stream().filter(this::isValid).collect(Collectors.toList());
+        var possiblePositions = getPossiblePositions(validTickets);
+
+        reducePositions(possiblePositions);
+
+        return rules.stream().parallel()
+                .filter(rule -> rule.field.startsWith("departure"))
+                .mapToLong(rule -> myTicket.fields.get(possiblePositions.get(rule).get(0)))
+                .reduce(1, (a, b) -> a * b);
+    }
+
+    private Map<Rule, List<Integer>> getPossiblePositions(final List<Ticket> validTickets) {
         Map<Rule, List<Integer>> possiblePositions = new HashMap<>();
         for (var rule : rules) {
             List<Integer> possibilities = new ArrayList<>();
-            TICKET:
             for (var i = 0; i < myTicket.fields.size(); i++) {
-                for (var ticket : validTickets) {
-                    if (!isValid(rule, ticket.fields.get(i))) {
-                        continue TICKET;
-                    }
-                }
-                if (!isValid(rule, myTicket.fields.get(i))) continue;
+                if (!allTicketsMatchRule(validTickets, rule, i)) continue;
                 possibilities.add(i);
-                //System.out.println("HEJ: " + i + " " + rule.field);
             }
             possiblePositions.put(rule, possibilities);
         }
-        System.out.println(possiblePositions);
+        return possiblePositions;
+    }
 
+    private boolean allTicketsMatchRule(final List<Ticket> validTickets, final Rule rule, final int field) {
+        for (var ticket : validTickets) {
+            if (!isValid(rule, ticket.fields.get(field))) {
+                return false;
+            }
+        }
+        return isValid(rule, myTicket.fields.get(field));
+    }
+
+    private void reducePositions(final Map<Rule, List<Integer>> possiblePositions) {
         var loop = true;
         while (loop) {
             loop = false;
@@ -108,26 +137,13 @@ public class Day16 implements Day {
                 }
             }
         }
-
-        var result = 1L;
-        for (var rule : rules) {
-            if (rule.field.startsWith("departure")) {
-                result *= myTicket.fields.get(possiblePositions.get(rule).get(0));
-            }
-        }
-        System.out.println(possiblePositions);
-        return result;
     }
 
-    private void removePossibilities(Map<Rule, List<Integer>> possiblePositions, Integer position) {
+    private void removePossibilities(final Map<Rule, List<Integer>> possiblePositions, final Integer position) {
         for (var rule : rules) {
             if (possiblePositions.get(rule).size() > 1) {
                 possiblePositions.get(rule).remove(position);
             }
         }
-    }
-
-    private boolean isValid(Ticket ticket) {
-        return ticket.fields.stream().mapToInt(Integer::intValue).allMatch(this::isValid);
     }
 }
