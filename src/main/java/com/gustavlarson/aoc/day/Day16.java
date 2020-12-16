@@ -2,9 +2,7 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -65,15 +63,71 @@ public class Day16 implements Day {
 
     private boolean isValid(int value) {
         for (var rule : rules) {
-            for (var valid : rule.validInputs) {
-                if (value >= valid.min && value <= valid.max) return true;
-            }
+            if (isValid(rule, value)) return true;
+        }
+        return false;
+    }
+
+    private boolean isValid(Rule rule, int value) {
+        for (var valid : rule.validInputs) {
+            if (value >= valid.min && value <= valid.max) return true;
         }
         return false;
     }
 
     @Override
     public long solvePart2() {
-        return 0;
+        List<Ticket> validTickets = nearbyTickets.stream().filter(this::isValid).collect(Collectors.toList());
+        Map<Rule, List<Integer>> possiblePositions = new HashMap<>();
+        for (var rule : rules) {
+            List<Integer> possibilities = new ArrayList<>();
+            TICKET:
+            for (var i = 0; i < myTicket.fields.size(); i++) {
+                for (var ticket : validTickets) {
+                    if (!isValid(rule, ticket.fields.get(i))) {
+                        continue TICKET;
+                    }
+                }
+                if (!isValid(rule, myTicket.fields.get(i))) continue;
+                possibilities.add(i);
+                //System.out.println("HEJ: " + i + " " + rule.field);
+            }
+            possiblePositions.put(rule, possibilities);
+        }
+        System.out.println(possiblePositions);
+
+        var loop = true;
+        while (loop) {
+            loop = false;
+            for (var rule : rules) {
+                if (possiblePositions.get(rule).size() == 1) {
+                    var position = possiblePositions.get(rule).get(0);
+                    removePossibilities(possiblePositions, position);
+                } else {
+                    loop = true;
+                }
+            }
+        }
+
+        var result = 1L;
+        for (var rule : rules) {
+            if (rule.field.startsWith("departure")) {
+                result *= myTicket.fields.get(possiblePositions.get(rule).get(0));
+            }
+        }
+        System.out.println(possiblePositions);
+        return result;
+    }
+
+    private void removePossibilities(Map<Rule, List<Integer>> possiblePositions, Integer position) {
+        for (var rule : rules) {
+            if (possiblePositions.get(rule).size() > 1) {
+                possiblePositions.get(rule).remove(position);
+            }
+        }
+    }
+
+    private boolean isValid(Ticket ticket) {
+        return ticket.fields.stream().mapToInt(Integer::intValue).allMatch(this::isValid);
     }
 }
