@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdventOfCode {
-    private static final String INPUT_FOLDER = "input";
+    public static final String INPUT_FOLDER = "input";
 
     public static void main(final String[] args) {
         if (args.length != 1) {
@@ -17,7 +17,7 @@ public class AdventOfCode {
 
         final int dayArg = Integer.parseInt(args[0]);
         final List<String> input = loadInput(dayArg);
-        
+
         final Day day = DayFactory.getDay(dayArg, input);
 
         final long startTime = System.nanoTime();
