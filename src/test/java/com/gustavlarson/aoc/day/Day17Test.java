@@ -41,6 +41,6 @@ public class Day17Test {
     public void testPart2Real() {
         final List<String> input = getFromFile(17);
         final Day day = new Day17(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(2084, day.solvePart2());
     }
 }

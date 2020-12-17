@@ -8,7 +8,7 @@ public class Day17 implements Day {
 
     private final static int CYCLES = 6;
 
-    class ActiveCell {
+    static class ActiveCell {
         final int x, y, z, w;
 
         ActiveCell(int x, int y, int z, int w) {
@@ -23,10 +23,7 @@ public class Day17 implements Day {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ActiveCell that = (ActiveCell) o;
-            return x == that.x &&
-                    y == that.y &&
-                    z == that.z &&
-                    w == that.w;
+            return x == that.x && y == that.y && z == that.z && w == that.w;
         }
 
         @Override
@@ -58,11 +55,11 @@ public class Day17 implements Day {
         return activeCells.size();
     }
 
-    private Set<ActiveCell> getNextState(final Set<ActiveCell> activeCells, boolean fourthDimension) {
+    private static Set<ActiveCell> getNextState(final Set<ActiveCell> activeCells, boolean fourthDimension) {
         final Set<ActiveCell> nextState = new HashSet<>();
 
         for (var activeCell : activeCells) {
-            var neighBours = getNeighbours(activeCell, activeCells, fourthDimension);
+            var neighBours = getNeighboursWithCount(activeCell, activeCells, fourthDimension);
             for (var cell : neighBours.keySet()) {
                 var count = neighBours.get(cell);
                 if (activeCells.contains(cell)) {
@@ -76,48 +73,39 @@ public class Day17 implements Day {
         return nextState;
     }
 
-    private Map<ActiveCell, Integer> getNeighbours(ActiveCell activeCell, Set<ActiveCell> activeCells, boolean fourthDimension) {
+    private static Map<ActiveCell, Integer> getNeighboursWithCount(ActiveCell activeCell, Set<ActiveCell> activeCells, boolean fourthDimension) {
         Map<ActiveCell, Integer> result = new HashMap<>();
-        for (var i = -1; i <= 1; i++) {
-            for (var j = -1; j <= 1; j++) {
-                for (var k = -1; k <= 1; k++) {
-                    if (fourthDimension) {
-                        for (var l = -1; l <= 1; l++) {
-                            var neighbour = new ActiveCell(i + activeCell.x, j + activeCell.y, k + activeCell.z, l + activeCell.w);
-                            var count = countActiveNeighbours(neighbour, activeCells, fourthDimension);
-                            result.put(neighbour, count);
-                        }
-                    } else {
-                        var neighbour = new ActiveCell(i + activeCell.x, j + activeCell.y, k + activeCell.z, 0);
+
+        for (var l = fourthDimension ? -1 : 0; l <= (fourthDimension ? 1 : 0); l++) {
+            for (var i = -1; i <= 1; i++) {
+                for (var j = -1; j <= 1; j++) {
+                    for (var k = -1; k <= 1; k++) {
+                        var neighbour = new ActiveCell(i + activeCell.x, j + activeCell.y, k + activeCell.z, l + activeCell.w);
                         var count = countActiveNeighbours(neighbour, activeCells, fourthDimension);
                         result.put(neighbour, count);
                     }
                 }
             }
         }
+
         return result;
     }
 
-    private int countActiveNeighbours(ActiveCell activeCell, Set<ActiveCell> activeCells, boolean fourthDimension) {
+    private static int countActiveNeighbours(ActiveCell activeCell, Set<ActiveCell> activeCells, boolean fourthDimension) {
         var count = 0;
 
-        for (var i = -1; i <= 1; i++) {
-            for (var j = -1; j <= 1; j++) {
-                for (var k = -1; k <= 1; k++) {
-                    if (fourthDimension) {
-                        for (var l = -1; l <= 1; l++) {
-                            if (i == 0 && j == 0 && k == 0 && l == 0) continue;
-                            var neighbour = new ActiveCell(i + activeCell.x, j + activeCell.y, k + activeCell.z, l + activeCell.w);
-                            if (activeCells.contains(neighbour)) count++;
-                        }
-                    } else {
-                        if (i == 0 && j == 0 && k == 0) continue;
-                        var neighbour = new ActiveCell(i + activeCell.x, j + activeCell.y, k + activeCell.z, 0);
+        for (var l = fourthDimension ? -1 : 0; l <= (fourthDimension ? 1 : 0); l++) {
+            for (var i = -1; i <= 1; i++) {
+                for (var j = -1; j <= 1; j++) {
+                    for (var k = -1; k <= 1; k++) {
+                        if (i == 0 && j == 0 && k == 0 && l == 0) continue;
+                        var neighbour = new ActiveCell(i + activeCell.x, j + activeCell.y, k + activeCell.z, l + activeCell.w);
                         if (activeCells.contains(neighbour)) count++;
                     }
                 }
             }
         }
+
         return count;
     }
 
