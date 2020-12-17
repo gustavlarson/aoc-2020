@@ -12,9 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Day17Test {
     @Test
     public void testPart101() {
-        final List<String> input = List.of("1", "2");
+        final List<String> input = getAsList("""
+                .#.
+                ..#
+                ###""");
         final Day day = new Day17(input);
-        assertEquals(0, day.solvePart1());
+        assertEquals(112, day.solvePart1());
     }
 
     @Test

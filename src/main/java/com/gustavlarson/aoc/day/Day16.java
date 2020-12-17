@@ -126,7 +126,9 @@ public class Day16 implements Day {
 
     private void reducePositions(final Map<Rule, List<Integer>> possiblePositions) {
         var loop = true;
+        var count = 0;
         while (loop) {
+            count++;
             loop = false;
             for (var rule : rules) {
                 if (possiblePositions.get(rule).size() == 1) {
@@ -137,6 +139,7 @@ public class Day16 implements Day {
                 }
             }
         }
+        System.out.println(count);
     }
 
     private void removePossibilities(final Map<Rule, List<Integer>> possiblePositions, final Integer position) {
