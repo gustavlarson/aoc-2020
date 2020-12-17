@@ -23,18 +23,18 @@ public class Day17Test {
     @Test
     public void testPart201() {
         final List<String> input = getAsList("""
-                1
-                2
-                """);
+                .#.
+                ..#
+                ###""");
         final Day day = new Day17(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(848, day.solvePart2());
     }
 
     @Test
     public void testPart1Real() {
         final List<String> input = getFromFile(17);
         final Day day = new Day17(input);
-        assertEquals(0, day.solvePart1());
+        assertEquals(289, day.solvePart1());
     }
 
     @Test
