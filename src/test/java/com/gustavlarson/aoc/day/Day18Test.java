@@ -50,6 +50,42 @@ public class Day18Test {
     }
 
     @Test
+    public void testPart106() {
+        final List<String> input = List.of("1 + 2 * 3 + 4 * 5 + 6", "1 + (2 * 3) + (4 * (5 + 6))");
+        final Day day = getDay(input);
+        assertEquals(71 + 51, day.solvePart1());
+    }
+
+    @Test
+    public void testPart107() {
+        final List<String> input = List.of("2 * 3 + (4 * 5)");
+        final Day day = getDay(input);
+        assertEquals(26, day.solvePart1());
+    }
+
+    @Test
+    public void testPart108() {
+        final List<String> input = List.of("5 + (8 * 3 + 9 + 3 * 4 * 3)");
+        final Day day = getDay(input);
+        assertEquals(437, day.solvePart1());
+    }
+
+
+    @Test
+    public void testPart109() {
+        final List<String> input = List.of("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))");
+        final Day day = getDay(input);
+        assertEquals(12240, day.solvePart1());
+    }
+
+    @Test
+    public void testPart110() {
+        final List<String> input = List.of("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2");
+        final Day day = getDay(input);
+        assertEquals(13632, day.solvePart1());
+    }
+
+    @Test
     public void testPart201() {
         final List<String> input = getAsList("""
                 1

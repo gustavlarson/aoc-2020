@@ -16,28 +16,34 @@ public class Day18 implements Day {
 
     @Override
     public long solvePart1() {
-        return input.stream().mapToLong(line -> evaluate(line)).sum();
+        return input.stream().map(line -> line.replace(" ", "")).mapToLong(Day18::evaluate).sum();
     }
 
-    private static final Pattern p = Pattern.compile("(?<left>\\d+)(?<op>[+*])(?<right>\\d+)");
+    private static final Pattern brackets = Pattern.compile("\\((?<expression>[\\d * +]+)\\)");
+    private static final Pattern math = Pattern.compile("(?<left>\\d+)(?<op>[+*])(?<right>\\d+)");
 
     private static long evaluate(String line) {
-        line = line.replace(" ", "");
-        Matcher m = p.matcher(line);
-        if (!m.find()) throw new IllegalStateException();
-        //Check if we have more to evaluate
-        int left = Integer.parseInt(m.group("left"));
-        String operator = m.group("op");
-        int right = Integer.parseInt(m.group("right"));
+        Matcher b = brackets.matcher(line);
+        while (b.find()) {
+            long result = evaluate(b.group("expression"));
+            line = line.replace(b.group(0), Long.toString(result));
+        }
 
-        int result = switch (operator) {
+        Matcher m = math.matcher(line);
+        if (!m.find()) return Long.parseLong(line);
+        //Check if we have more to evaluate
+        long left = Long.parseLong(m.group("left"));
+        String operator = m.group("op");
+        long right = Long.parseLong(m.group("right"));
+
+        long result = switch (operator) {
             case "+" -> left + right;
             case "*" -> left * right;
             default -> throw new ArithmeticException();
         };
 
         if (!m.group(0).equals(line)) {
-            String remainingExpression = line.replace(m.group(0), Integer.toString(result));
+            String remainingExpression = line.replace(m.group(0), Long.toString(result));
             return evaluate(remainingExpression);
         }
 
