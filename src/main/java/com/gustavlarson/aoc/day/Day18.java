@@ -16,6 +16,7 @@ public class Day18 implements Day {
 
     @Override
     public long solvePart1() {
+        input.stream().map(line -> line.replace(" ", "")).mapToLong(Day18::evaluate).forEach(n -> System.out.print(n + ", "));
         return input.stream().map(line -> line.replace(" ", "")).mapToLong(Day18::evaluate).sum();
     }
 
@@ -53,7 +54,7 @@ public class Day18 implements Day {
         if (m.group(0).equals(expression)) return result;
 
         //Evaluate remaining
-        String remainingExpression = expression.replace(m.group(0), Long.toString(result));
+        String remainingExpression = expression.replaceFirst(m.group(0).replace("*", "\\*").replace("+", "\\+"), Long.toString(result));
         return evaluate(remainingExpression);
     }
 
