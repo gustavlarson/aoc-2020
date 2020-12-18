@@ -5,19 +5,19 @@ import com.gustavlarson.aoc.Day;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day18 implements Day {
 
     private final List<String> input;
 
     public Day18(final List<String> input) {
-        this.input = input;
+        this.input = input.stream().map(line -> line.replace(" ", "")).collect(Collectors.toList());
     }
 
     @Override
     public long solvePart1() {
-        input.stream().map(line -> line.replace(" ", "")).mapToLong(Day18::evaluate).forEach(n -> System.out.print(n + ", "));
-        return input.stream().map(line -> line.replace(" ", "")).mapToLong(Day18::evaluate).sum();
+        return input.stream().mapToLong(Day18::evaluate).sum();
     }
 
     private static final Pattern brackets = Pattern.compile("\\((?<expression>[\\d * +]+)\\)");
@@ -60,6 +60,62 @@ public class Day18 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        return input.stream().mapToLong(Day18::evaluateAdvanced).sum();
+    }
+
+    private static long evaluateAdvanced(String expression) {
+        expression = evaluateBracketsAdvanced(expression);
+
+        expression = evaluateAddition(expression);
+
+        expression = evaluateMultiplication(expression);
+
+        return Long.parseLong(expression);
+    }
+
+    private static String evaluateBracketsAdvanced(String expression) {
+        Matcher m = brackets.matcher(expression);
+        while (m.find()) {
+            long result = evaluateAdvanced(m.group("expression"));
+            expression = expression.replace(m.group(0), Long.toString(result));
+            m = brackets.matcher(expression);
+        }
+        return expression;
+    }
+
+    private static final Pattern addition = Pattern.compile("(?<left>\\d+)(?<op>\\+)(?<right>\\d+)");
+
+    private static String evaluateAddition(String expression) {
+        Matcher m = addition.matcher(expression);
+        String remainingExpression = expression;
+        while (m.find()) {
+            //Evaluate
+            long left = Long.parseLong(m.group("left"));
+            long right = Long.parseLong(m.group("right"));
+
+            long result = left + right;
+            remainingExpression = remainingExpression.replaceFirst(m.group(0).replace("*", "\\*").replace("+", "\\+"), Long.toString(result));
+            m = addition.matcher(remainingExpression);
+        }
+
+        return remainingExpression;
+    }
+
+    private static final Pattern multiplication = Pattern.compile("(?<left>\\d+)(?<op>\\*)(?<right>\\d+)");
+
+    private static String evaluateMultiplication(String expression) {
+        Matcher m = multiplication.matcher(expression);
+        String remainingExpression = expression;
+        while (m.find()) {
+            //Evaluate
+            long left = Long.parseLong(m.group("left"));
+            long right = Long.parseLong(m.group("right"));
+
+            long result = left * right;
+            remainingExpression = remainingExpression.replaceFirst(m.group(0).replace("*", "\\*").replace("+", "\\+"), Long.toString(result));
+            m = multiplication.matcher(remainingExpression);
+        }
+
+        return remainingExpression;
     }
 }
