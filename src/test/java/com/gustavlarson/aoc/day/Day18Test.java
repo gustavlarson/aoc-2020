@@ -80,7 +80,7 @@ public class Day18Test {
 
     @Test
     public void testPart110() {
-        final List<String> input = List.of("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2");
+        final List<String> input = List.of("((((2 + 4) * 9) * (((6 + 9) * 8) + 6) + 6) + (2 + 4)) * 2");
         final Day day = getDay(input);
         assertEquals(13632, day.solvePart1());
     }

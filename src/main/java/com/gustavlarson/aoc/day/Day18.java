@@ -22,16 +22,23 @@ public class Day18 implements Day {
     private static final Pattern brackets = Pattern.compile("\\((?<expression>[\\d * +]+)\\)");
     private static final Pattern math = Pattern.compile("(?<left>\\d+)(?<op>[+*])(?<right>\\d+)");
 
-    private static long evaluate(String line) {
-        Matcher b = brackets.matcher(line);
-        while (b.find()) {
-            long result = evaluate(b.group("expression"));
-            line = line.replace(b.group(0), Long.toString(result));
+    private static String evaluateBrackets(String expression) {
+        Matcher m = brackets.matcher(expression);
+        while (m.find()) {
+            long result = evaluate(m.group("expression"));
+            expression = expression.replace(m.group(0), Long.toString(result));
         }
+        return expression;
+    }
 
-        Matcher m = math.matcher(line);
-        if (!m.find()) return Long.parseLong(line);
-        //Check if we have more to evaluate
+    private static long evaluate(String expression) {
+        expression = evaluateBrackets(expression);
+
+        Matcher m = math.matcher(expression);
+        //It's possible that we just have a number at this point, in that case just return it
+        if (!m.find()) return Long.parseLong(expression);
+
+        //Evaluate
         long left = Long.parseLong(m.group("left"));
         String operator = m.group("op");
         long right = Long.parseLong(m.group("right"));
@@ -42,12 +49,12 @@ public class Day18 implements Day {
             default -> throw new ArithmeticException();
         };
 
-        if (!m.group(0).equals(line)) {
-            String remainingExpression = line.replace(m.group(0), Long.toString(result));
-            return evaluate(remainingExpression);
-        }
+        //Check if whole expression has been evaluated
+        if (m.group(0).equals(expression)) return result;
 
-        return result;
+        //Evaluate remaining
+        String remainingExpression = expression.replace(m.group(0), Long.toString(result));
+        return evaluate(remainingExpression);
     }
 
     @Override
