@@ -21,8 +21,7 @@ public class Day18 implements Day {
     }
 
     private static final Pattern brackets = Pattern.compile("\\((?<expression>[\\d * +]+)\\)");
-    private static final Pattern math = Pattern.compile("(?<left>\\d+)(?<op>[+*])(?<right>\\d+)");
-
+    
     private static String evaluateBrackets(String expression) {
         Matcher m = brackets.matcher(expression);
         while (m.find()) {
@@ -35,6 +34,7 @@ public class Day18 implements Day {
     private static long evaluate(String expression) {
         expression = evaluateBrackets(expression);
 
+        final Pattern math = Pattern.compile("(?<left>\\d+)(?<op>[+*])(?<right>\\d+)");
         Matcher m = math.matcher(expression);
         //It's possible that we just have a number at this point, in that case just return it
         if (!m.find()) return Long.parseLong(expression);
@@ -54,8 +54,12 @@ public class Day18 implements Day {
         if (m.group(0).equals(expression)) return result;
 
         //Evaluate remaining
-        String remainingExpression = expression.replaceFirst(m.group(0).replace("*", "\\*").replace("+", "\\+"), Long.toString(result));
+        String remainingExpression = expression.replaceFirst(escape(m.group(0)), Long.toString(result));
         return evaluate(remainingExpression);
+    }
+
+    private static String escape(String input) {
+        return input.replace("*", "\\*").replace("+", "\\+");
     }
 
     @Override
@@ -83,9 +87,9 @@ public class Day18 implements Day {
         return expression;
     }
 
-    private static final Pattern addition = Pattern.compile("(?<left>\\d+)(?<op>\\+)(?<right>\\d+)");
-
     private static String evaluateAddition(String expression) {
+        final Pattern addition = Pattern.compile("(?<left>\\d+)(?<op>\\+)(?<right>\\d+)");
+
         Matcher m = addition.matcher(expression);
         String remainingExpression = expression;
         while (m.find()) {
@@ -94,16 +98,17 @@ public class Day18 implements Day {
             long right = Long.parseLong(m.group("right"));
 
             long result = left + right;
-            remainingExpression = remainingExpression.replaceFirst(m.group(0).replace("*", "\\*").replace("+", "\\+"), Long.toString(result));
+
+            remainingExpression = remainingExpression.replaceFirst(escape(m.group(0)), Long.toString(result));
             m = addition.matcher(remainingExpression);
         }
 
         return remainingExpression;
     }
 
-    private static final Pattern multiplication = Pattern.compile("(?<left>\\d+)(?<op>\\*)(?<right>\\d+)");
+    private static String evaluateMultiplication(final String expression) {
+        final Pattern multiplication = Pattern.compile("(?<left>\\d+)(?<op>\\*)(?<right>\\d+)");
 
-    private static String evaluateMultiplication(String expression) {
         Matcher m = multiplication.matcher(expression);
         String remainingExpression = expression;
         while (m.find()) {
@@ -112,7 +117,8 @@ public class Day18 implements Day {
             long right = Long.parseLong(m.group("right"));
 
             long result = left * right;
-            remainingExpression = remainingExpression.replaceFirst(m.group(0).replace("*", "\\*").replace("+", "\\+"), Long.toString(result));
+
+            remainingExpression = remainingExpression.replaceFirst(escape(m.group(0)), Long.toString(result));
             m = multiplication.matcher(remainingExpression);
         }
 
