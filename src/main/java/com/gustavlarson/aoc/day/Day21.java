@@ -2,10 +2,7 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -32,8 +29,7 @@ public class Day21 implements Day {
         this.foods = input.stream().map(Food::new).collect(Collectors.toList());
     }
 
-    @Override
-    public long solvePart1() {
+    private Set<String> getHypoallergenic() {
         Set<String> ingredients = new HashSet<>();
         foods.stream().forEach(food -> ingredients.addAll(food.ingredients));
         Set<String> allergens = new HashSet<>();
@@ -57,6 +53,12 @@ public class Day21 implements Day {
             }
         }
 
+        return hypoallergenic;
+    }
+
+    @Override
+    public long solvePart1() {
+        Set<String> hypoallergenic = getHypoallergenic();
         return hypoallergenic.stream().mapToLong(
                 ingredient -> foods.stream().mapToLong(food -> food.ingredients.contains(ingredient) ? 1L : 0L).sum()
         ).sum();
@@ -64,6 +66,47 @@ public class Day21 implements Day {
 
     @Override
     public long solvePart2() {
+        Set<String> hypoallergenic = getHypoallergenic();
+        Map<String, Set<String>> candidaters = new HashMap<>();
+
+        for (var food : foods) {
+            for (var ingredient : food.ingredients) {
+                for (var allergen : food.allergens) {
+                    if (!hypoallergenic.contains(ingredient)) {
+                        if (!candidaters.containsKey(allergen)) {
+                            candidaters.put(allergen, new HashSet<>());
+                        }
+                        candidaters.get(allergen).add(ingredient);
+                    }
+                }
+            }
+        }
+
+        System.out.println(candidaters);
+        Map<String, String> solution = new TreeMap<>();
+
+        for (var allergen : candidaters.keySet()) {
+            candidaters.get(allergen).removeIf(ingredient -> !foods.stream()
+                    .filter(food -> food.allergens.contains(allergen))
+                    .allMatch(food -> food.ingredients.contains(ingredient)));
+        }
+
+        while (candidaters.size() > 0) {
+            System.out.println(candidaters);
+            String allergen = candidaters.keySet().stream().filter(a -> candidaters.get(a).size() == 1).findFirst().orElseThrow();
+            String ingredient = (String) candidaters.get(allergen).toArray()[0];
+            solution.put(allergen, ingredient);
+
+            candidaters.remove(allergen);
+            for (var c : candidaters.keySet()) {
+                candidaters.get(c).remove(ingredient);
+            }
+        }
+
+        System.out.println(solution);
+
         return 0;
     }
 }
+
+//mfp,mgvfmvp,nhdjth,hcdchl,dvkbjh,dcvrf,bcjz,mhnrqp

@@ -28,11 +28,12 @@ public class Day21Test {
     @Test
     public void testPart201() {
         final List<String> input = getAsList("""
-                1
-                2
-                """);
+                mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
+                trh fvjkl sbzzf mxmxvkd (contains dairy)
+                sqjhc fvjkl (contains soy)
+                sqjhc mxmxvkd sbzzf (contains fish)""");
         final Day day = getDay(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(2412, day.solvePart2());
     }
 
     @Test
@@ -47,5 +48,6 @@ public class Day21Test {
         final List<String> input = getFromFile(21);
         final Day day = getDay(input);
         assertEquals(0, day.solvePart2());
+        //mfp,mgvfmvp,nhdjth,hcdchl,dvkbjh,dcvrf,bcjz,mhnrqp
     }
 }
