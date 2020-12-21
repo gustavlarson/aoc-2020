@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 public class Day21 implements Day {
 
-    Pattern pattern = Pattern.compile("(?<ingredients>[\\w ]+) \\(contains (?<allergens>.*)\\)");
+    private static final Pattern pattern = Pattern.compile("(?<ingredients>[\\w ]+) \\(contains (?<allergens>.*)\\)");
 
-    class Food {
+    static class Food {
         Set<String> ingredients;
         Set<String> allergens;
 
@@ -31,9 +31,11 @@ public class Day21 implements Day {
 
     private Set<String> getHypoallergenic() {
         Set<String> ingredients = new HashSet<>();
-        foods.stream().forEach(food -> ingredients.addAll(food.ingredients));
         Set<String> allergens = new HashSet<>();
-        foods.stream().forEach(food -> allergens.addAll(food.allergens));
+        foods.forEach(food -> {
+            ingredients.addAll(food.ingredients);
+            allergens.addAll(food.allergens);
+        });
 
         Set<String> hypoallergenic = new HashSet<>();
 
@@ -48,9 +50,8 @@ public class Day21 implements Day {
                 }
 
             }
-            if (!potentialAllergen) {
-                hypoallergenic.add(ingredient);
-            }
+
+            if (!potentialAllergen) hypoallergenic.add(ingredient);
         }
 
         return hypoallergenic;
@@ -60,51 +61,50 @@ public class Day21 implements Day {
     public long solvePart1() {
         Set<String> hypoallergenic = getHypoallergenic();
         return hypoallergenic.stream().mapToLong(
-                ingredient -> foods.stream().mapToLong(food -> food.ingredients.contains(ingredient) ? 1L : 0L).sum()
+                ingredient -> foods.stream().filter(food -> food.ingredients.contains(ingredient)).count()
         ).sum();
     }
 
     @Override
     public long solvePart2() {
         Set<String> hypoallergenic = getHypoallergenic();
-        Map<String, Set<String>> candidaters = new HashMap<>();
+        Map<String, Set<String>> candidates = new HashMap<>();
 
         for (var food : foods) {
             for (var ingredient : food.ingredients) {
                 for (var allergen : food.allergens) {
                     if (!hypoallergenic.contains(ingredient)) {
-                        if (!candidaters.containsKey(allergen)) {
-                            candidaters.put(allergen, new HashSet<>());
+                        if (!candidates.containsKey(allergen)) {
+                            candidates.put(allergen, new HashSet<>());
                         }
-                        candidaters.get(allergen).add(ingredient);
+                        candidates.get(allergen).add(ingredient);
                     }
                 }
             }
         }
 
-        System.out.println(candidaters);
         Map<String, String> solution = new TreeMap<>();
 
-        for (var allergen : candidaters.keySet()) {
-            candidaters.get(allergen).removeIf(ingredient -> !foods.stream()
+        for (var allergen : candidates.keySet()) {
+            candidates.get(allergen).removeIf(ingredient -> !foods.stream()
                     .filter(food -> food.allergens.contains(allergen))
                     .allMatch(food -> food.ingredients.contains(ingredient)));
         }
 
-        while (candidaters.size() > 0) {
-            System.out.println(candidaters);
-            String allergen = candidaters.keySet().stream().filter(a -> candidaters.get(a).size() == 1).findFirst().orElseThrow();
-            String ingredient = (String) candidaters.get(allergen).toArray()[0];
+        while (candidates.size() > 0) {
+            String allergen = candidates.keySet().stream().filter(a -> candidates.get(a).size() == 1).findFirst().orElseThrow();
+            String ingredient = (String) candidates.get(allergen).toArray()[0];
             solution.put(allergen, ingredient);
 
-            candidaters.remove(allergen);
-            for (var c : candidaters.keySet()) {
-                candidaters.get(c).remove(ingredient);
+            candidates.remove(allergen);
+            for (var c : candidates.keySet()) {
+                candidates.get(c).remove(ingredient);
             }
         }
 
-        System.out.println(solution);
 
+        String result = solution.keySet().stream().map(solution::get).reduce((a, b) -> a + "," + b).orElseThrow();
+        System.out.println(result);
         return 0;
     }
 }

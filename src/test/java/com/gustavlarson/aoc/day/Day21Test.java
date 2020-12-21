@@ -33,14 +33,14 @@ public class Day21Test {
                 sqjhc fvjkl (contains soy)
                 sqjhc mxmxvkd sbzzf (contains fish)""");
         final Day day = getDay(input);
-        assertEquals(2412, day.solvePart2());
+        assertEquals(0, day.solvePart2());
     }
 
     @Test
     public void testPart1Real() {
         final List<String> input = getFromFile(21);
         final Day day = getDay(input);
-        assertEquals(0, day.solvePart1());
+        assertEquals(2412, day.solvePart1());
     }
 
     @Test
