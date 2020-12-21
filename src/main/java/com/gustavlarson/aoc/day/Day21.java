@@ -68,14 +68,14 @@ public class Day21 implements Day {
     @Override
     public long solvePart2() {
         Set<String> hypoallergenic = getHypoallergenic();
-        Map<String, Set<String>> candidates = new HashMap<>();
+        Map<String, TreeSet<String>> candidates = new HashMap<>();
 
         for (var food : foods) {
             for (var ingredient : food.ingredients) {
-                for (var allergen : food.allergens) {
-                    if (!hypoallergenic.contains(ingredient)) {
+                if (!hypoallergenic.contains(ingredient)) {
+                    for (var allergen : food.allergens) {
                         if (!candidates.containsKey(allergen)) {
-                            candidates.put(allergen, new HashSet<>());
+                            candidates.put(allergen, new TreeSet<>());
                         }
                         candidates.get(allergen).add(ingredient);
                     }
@@ -83,7 +83,6 @@ public class Day21 implements Day {
             }
         }
 
-        Map<String, String> solution = new TreeMap<>();
 
         for (var allergen : candidates.keySet()) {
             candidates.get(allergen).removeIf(ingredient -> !foods.stream()
@@ -91,9 +90,11 @@ public class Day21 implements Day {
                     .allMatch(food -> food.ingredients.contains(ingredient)));
         }
 
+        Map<String, String> solution = new TreeMap<>();
+
         while (candidates.size() > 0) {
             String allergen = candidates.keySet().stream().filter(a -> candidates.get(a).size() == 1).findFirst().orElseThrow();
-            String ingredient = (String) candidates.get(allergen).toArray()[0];
+            String ingredient = candidates.get(allergen).first();
             solution.put(allergen, ingredient);
 
             candidates.remove(allergen);
@@ -102,11 +103,9 @@ public class Day21 implements Day {
             }
         }
 
-
         String result = solution.keySet().stream().map(solution::get).reduce((a, b) -> a + "," + b).orElseThrow();
+        
         System.out.println(result);
         return 0;
     }
 }
-
-//mfp,mgvfmvp,nhdjth,hcdchl,dvkbjh,dcvrf,bcjz,mhnrqp
