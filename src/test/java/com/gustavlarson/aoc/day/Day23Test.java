@@ -38,6 +38,6 @@ public class Day23Test {
     public void testPart2Real() {
         final List<String> input = getFromFile(23);
         final Day day = getDay(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(192515314252L, day.solvePart2());
     }
 }
