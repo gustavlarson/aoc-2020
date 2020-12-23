@@ -2,7 +2,9 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day23 implements Day {
@@ -91,13 +93,13 @@ public class Day23 implements Day {
             labels.add(labels.size() + 1);
         }
 
-        Map<Integer, Cup> cups = new HashMap<>(SIZE + 1);
+        Cup[] cups = new Cup[SIZE + 1];
 
         Cup firstCup = null;
         Cup lastCup = null;
         for (var label : labels) {
             final Cup newCup = new Cup(label);
-            cups.put(label, newCup);
+            cups[label] = newCup;
             if (firstCup == null) firstCup = newCup;
             if (lastCup != null) lastCup.next = newCup;
             lastCup = newCup;
@@ -109,11 +111,11 @@ public class Day23 implements Day {
             current = moveCup(cups, current);
         }
 
-        Cup one = cups.get(1);
+        Cup one = cups[1];
         return (long) one.next.label * (long) one.next.next.label;
     }
 
-    private static Cup moveCup(Map<Integer, Cup> cups, Cup current) {
+    private static Cup moveCup(Cup[] cups, Cup current) {
         Cup pickup = current.next;
 
         List<Integer> pickupValues = new ArrayList<>();
@@ -121,15 +123,14 @@ public class Day23 implements Day {
         pickupValues.add(pickup.next.label);
         pickupValues.add(pickup.next.next.label);
 
-        var destinationLabel = current.label - 1;
-        if (destinationLabel == 0) destinationLabel = SIZE;
-        while (pickupValues.contains(destinationLabel)) {
+        var destinationLabel = current.label;
+        do {
             destinationLabel--;
             if (destinationLabel == 0) destinationLabel = SIZE;
-        }
+        } while (pickupValues.contains(destinationLabel));
 
         current.next = current.next.next.next.next;
-        Cup destinationCup = cups.get(destinationLabel);
+        Cup destinationCup = cups[destinationLabel];
         pickup.next.next.next = destinationCup.next;
         destinationCup.next = pickup;
         return current.next;
