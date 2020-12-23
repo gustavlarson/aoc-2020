@@ -3,7 +3,6 @@ package com.gustavlarson.aoc.day;
 import com.gustavlarson.aoc.Day;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,11 +17,11 @@ public class Day23 implements Day {
     @Override
     public long solvePart1() {
         List<Integer> state = input;
-        System.out.println("Initial: " + state);
+//        System.out.println("Initial: " + state);
 
         for (int i = 1; i <= 100; i++) {
             state = move(state);
-            System.out.println("Move " + i + " " + state);
+//            System.out.println("Move " + i + " " + state);
         }
 
         return getLabels(state);
@@ -46,13 +45,12 @@ public class Day23 implements Day {
         pickup.add(state.remove(1));
         pickup.add(state.remove(1));
 
-        int destination = state.get(0) - 1;
-        //System.out.println("Destination: " + destination);
-        if (destination == 0) destination = 9;
-        while (pickup.contains(destination)) {
+        int destination = state.get(0);
+        do {
             destination--;
             if (destination == 0) destination = 9;
-        }
+        } while (pickup.contains(destination));
+        //System.out.println("Destination: " + destination);
 
         List<Integer> newState = new ArrayList<>();
         // Add all to the left of destination and the destination
@@ -71,9 +69,7 @@ public class Day23 implements Day {
         return newState;
     }
 
-    //    private static final int SIZE = 10;
     private static final int SIZE = 1_000_000;
-    //    private static final int ITERATIONS = 100;
     private static final int ITERATIONS = 10_000_000;
 
     static class Cup {
@@ -85,10 +81,10 @@ public class Day23 implements Day {
         }
     }
 
-
     @Override
     public long solvePart2() {
-        List<Integer> labels = new LinkedList<>(input);
+        List<Integer> labels = new ArrayList<>(SIZE);
+        labels.addAll(input);
         while (labels.size() < SIZE) {
             labels.add(labels.size() + 1);
         }
