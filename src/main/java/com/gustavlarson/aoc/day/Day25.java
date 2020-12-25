@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Day25 implements Day {
 
+    public static final int HANDSHAKE_SUBJECT_NUMBER = 7;
     private final List<String> input;
 
     public Day25(final List<String> input) {
@@ -17,8 +18,7 @@ public class Day25 implements Day {
         long cardPublicKey = Long.parseLong(input.get(0));
         long doorPublicKey = Long.parseLong(input.get(1));
 
-        long cardLoopSize = findLoopSize(cardPublicKey, 7);
-
+        long cardLoopSize = findLoopSize(cardPublicKey);
 
         return transform(doorPublicKey, cardLoopSize);
     }
@@ -31,12 +31,12 @@ public class Day25 implements Day {
         return value;
     }
 
-    private static long findLoopSize(long publicKey, long subjectNumber) {
+    private static long findLoopSize(long publicKey) {
         long loopSize = 0;
         long value = 1;
         while (value != publicKey) {
             loopSize++;
-            value = transformStep(value, subjectNumber);
+            value = transformStep(value, HANDSHAKE_SUBJECT_NUMBER);
         }
         return loopSize;
     }
