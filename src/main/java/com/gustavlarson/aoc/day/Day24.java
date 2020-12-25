@@ -2,10 +2,8 @@ package com.gustavlarson.aoc.day;
 
 import com.gustavlarson.aoc.Day;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -18,6 +16,13 @@ public class Day24 implements Day {
         int x = 0;
         int y = 0;
         int z = 0;
+
+        Tile(int x, int y, int z) {
+            if (x + y + z != 0) throw new IllegalStateException("WTF");
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
 
         Tile(String input) {
             Matcher m = p.matcher(input);
@@ -51,7 +56,17 @@ public class Day24 implements Day {
                 }
                 if (x + y + z != 0) throw new IllegalStateException("WTF");
             }
-            if (x + y + z != 0) throw new IllegalStateException("WTF");
+        }
+
+        List<Tile> getNeighbours() {
+            List<Tile> neighbours = new ArrayList<>();
+            neighbours.add(new Tile(x + 1, y - 1, z));
+            neighbours.add(new Tile(x - 1, y + 1, z));
+            neighbours.add(new Tile(x + 1, y, z - 1));
+            neighbours.add(new Tile(x - 1, y, z + 1));
+            neighbours.add(new Tile(x, y + 1, z - 1));
+            neighbours.add(new Tile(x, y - 1, z + 1));
+            return neighbours;
         }
 
         @Override
@@ -96,6 +111,29 @@ public class Day24 implements Day {
 
     @Override
     public long solvePart2() {
-        return 0;
+        Map<Tile, Boolean> tiles = new ConcurrentHashMap<>();
+        for (var tile : input) {
+            var isFlipped = tiles.getOrDefault(tile, false);
+            tiles.put(tile, !isFlipped);
+        }
+        for (var i = 0; i < 100; i++) {
+            Map<Tile, Boolean> newTiles = new ConcurrentHashMap<>();
+            for (var tile : tiles.keySet()) {
+                Map<Tile, Boolean> finalTiles = tiles;
+                tile.getNeighbours().forEach(neighbour -> finalTiles.putIfAbsent(neighbour, false));
+            }
+            for (var tile : tiles.keySet()) {
+                newTiles.put(tile, tiles.get(tile));
+                var blackNeighbours = tile.getNeighbours().stream().filter(tiles::get).count();
+                if (tiles.get(tile) && (blackNeighbours == 0 || blackNeighbours > 2)) {
+                    newTiles.put(tile, false);
+                }
+                if (!tiles.get(tile) && blackNeighbours == 2) {
+                    newTiles.put(tile, true);
+                }
+            }
+            tiles = newTiles;
+        }
+        return tiles.values().stream().filter(v -> v).count();
     }
 }

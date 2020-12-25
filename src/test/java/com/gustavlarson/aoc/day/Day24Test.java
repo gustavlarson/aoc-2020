@@ -10,6 +10,29 @@ import static com.gustavlarson.aoc.day.TestHelper.getFromFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day24Test {
+
+    public static final List<String> INPUT = getAsList("""
+            sesenwnenenewseeswwswswwnenewsewsw
+            neeenesenwnwwswnenewnwwsewnenwseswesw
+            seswneswswsenwwnwse
+            nwnwneseeswswnenewneswwnewseswneseene
+            swweswneswnenwsewnwneneseenw
+            eesenwseswswnenwswnwnwsewwnwsene
+            sewnenenenesenwsewnenwwwse
+            wenwwweseeeweswwwnwwe
+            wsweesenenewnwwnwsenewsenwwsesesenwne
+            neeswseenwwswnwswswnw
+            nenwswwsewswnenenewsenwsenwnesesenew
+            enewnwewneswsewnwswenweswnenwsenwsw
+            sweneswneswneneenwnewenewwneswswnese
+            swwesenesewenwneswnwwneseswwne
+            enesenwswwswneneswsenwnewswseenwsese
+            wnwnesenesenenwwnenwsewesewsesesew
+            nenewswnwewswnenesenwnesewesw
+            eneswnwswnwsenenwnwnwwseeswneewsenese
+            neswnwewnwnwseenwseesewsenwsweewe
+            wseweeenwnesenwwwswnew""");
+
     private static Day getDay(List<String> input) {
         return new Day24(input);
     }
@@ -39,39 +62,14 @@ public class Day24Test {
 
     @Test
     public void testPart103() {
-        final List<String> input = getAsList("""
-                sesenwnenenewseeswwswswwnenewsewsw
-                neeenesenwnwwswnenewnwwsewnenwseswesw
-                seswneswswsenwwnwse
-                nwnwneseeswswnenewneswwnewseswneseene
-                swweswneswnenwsewnwneneseenw
-                eesenwseswswnenwswnwnwsewwnwsene
-                sewnenenenesenwsewnenwwwse
-                wenwwweseeeweswwwnwwe
-                wsweesenenewnwwnwsenewsenwwsesesenwne
-                neeswseenwwswnwswswnw
-                nenwswwsewswnenenewsenwsenwnesesenew
-                enewnwewneswsewnwswenweswnenwsenwsw
-                sweneswneswneneenwnewenewwneswswnese
-                swwesenesewenwneswnwwneseswwne
-                enesenwswwswneneswsenwnewswseenwsese
-                wnwnesenesenenwwnenwsewesewsesesew
-                nenewswnwewswnenesenwnesewesw
-                eneswnwswnwsenenwnwnwwseeswneewsenese
-                neswnwewnwnwseenwseesewsenwsweewe
-                wseweeenwnesenwwwswnew""");
-        final Day day = getDay(input);
+        final Day day = getDay(INPUT);
         assertEquals(10, day.solvePart1());
     }
 
     @Test
     public void testPart201() {
-        final List<String> input = getAsList("""
-                1
-                2
-                """);
-        final Day day = getDay(input);
-        assertEquals(0, day.solvePart2());
+        final Day day = getDay(INPUT);
+        assertEquals(2208, day.solvePart2());
     }
 
     @Test
