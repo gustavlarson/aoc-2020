@@ -24,43 +24,53 @@ public class Day19 implements Day {
         this.messages = input.stream().dropWhile(line -> line.length() > 0).collect(Collectors.toList());
     }
 
-    private String expandRule(final int ruleNumber, final StringBuilder sb) {
+    private void expandRule(final int ruleNumber, final StringBuilder sb, final int recursion) {
+        // Not proud of this solution :)
+        if (recursion > 15) {
+            return;
+        }
         String rule = rules.get(ruleNumber);
         if (rule.contains("\"")) {
             sb.append(rule.replace("\"", ""));
-            return rule.replace("\"", "");
+            return;
         }
 
-        String s = "(";
-        sb.append("(");
+        sb.append("(?:");
 
         for (var option : rule.split("\\|")) {
             for (var r : option.trim().split(" ")) {
-                s += expandRule(Integer.parseInt(r), sb);
+                expandRule(Integer.parseInt(r), sb, recursion + 1);
             }
-            s += "|";
             sb.append("|");
         }
         sb.deleteCharAt(sb.length() - 1);
+
         sb.append(")");
-        return s + ")";
+    }
+
+    private void expandRule(final int ruleNumber, final StringBuilder regex) {
+        expandRule(ruleNumber, regex, 0);
     }
 
     @Override
     public long solvePart1() {
-        StringBuilder sb = new StringBuilder("^");
-        String regex = expandRule(0, sb);
-        sb.append("$");
-        System.out.println(regex);
-        System.out.println(sb);
-        Pattern p = Pattern.compile(sb.toString());
+        StringBuilder regex = new StringBuilder("^");
+        expandRule(0, regex);
+        regex.append("$");
+        Pattern p = Pattern.compile(regex.toString());
 
-        return messages.stream().filter(line ->
-                p.matcher(line).find()).count();
+        return messages.stream().filter(line -> p.matcher(line).find()).count();
     }
 
     @Override
     public long solvePart2() {
-        return 0;
+        rules.put(8, "42 | 42 8");
+        rules.put(11, "42 31 | 42 11 31");
+        StringBuilder regex = new StringBuilder("^");
+        expandRule(0, regex);
+        regex.append("$");
+        Pattern p = Pattern.compile(regex.toString());
+
+        return messages.stream().filter(line -> p.matcher(line).find()).count();
     }
 }
