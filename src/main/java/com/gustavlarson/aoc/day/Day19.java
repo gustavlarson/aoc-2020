@@ -26,9 +26,8 @@ public class Day19 implements Day {
 
     private void expandRule(final int ruleNumber, final StringBuilder sb, final int recursion) {
         // Not proud of this solution :)
-        if (recursion > 15) {
-            return;
-        }
+        if (recursion > 15) return;
+        
         String rule = rules.get(ruleNumber);
         if (rule.contains("\"")) {
             sb.append(rule.replace("\"", ""));
@@ -48,16 +47,17 @@ public class Day19 implements Day {
         sb.append(")");
     }
 
-    private void expandRule(final int ruleNumber, final StringBuilder regex) {
-        expandRule(ruleNumber, regex, 0);
+    private String expandRules() {
+        StringBuilder regex = new StringBuilder("^");
+        expandRule(0, regex, 0);
+        regex.append("$");
+        return regex.toString();
     }
 
     @Override
     public long solvePart1() {
-        StringBuilder regex = new StringBuilder("^");
-        expandRule(0, regex);
-        regex.append("$");
-        Pattern p = Pattern.compile(regex.toString());
+        String regex = expandRules();
+        Pattern p = Pattern.compile(regex);
 
         return messages.stream().filter(line -> p.matcher(line).find()).count();
     }
@@ -66,10 +66,9 @@ public class Day19 implements Day {
     public long solvePart2() {
         rules.put(8, "42 | 42 8");
         rules.put(11, "42 31 | 42 11 31");
-        StringBuilder regex = new StringBuilder("^");
-        expandRule(0, regex);
-        regex.append("$");
-        Pattern p = Pattern.compile(regex.toString());
+
+        String regex = expandRules();
+        Pattern p = Pattern.compile(regex);
 
         return messages.stream().filter(line -> p.matcher(line).find()).count();
     }
