@@ -18,7 +18,7 @@ public class Day25 implements Day {
         long cardPublicKey = Long.parseLong(input.get(0));
         long doorPublicKey = Long.parseLong(input.get(1));
 
-        long cardLoopSize = findLoopSize(cardPublicKey);
+        int cardLoopSize = findLoopSize(cardPublicKey);
 
         return transform(doorPublicKey, cardLoopSize);
     }
@@ -31,8 +31,8 @@ public class Day25 implements Day {
         return value;
     }
 
-    private static long findLoopSize(long publicKey) {
-        long loopSize = 0;
+    private static int findLoopSize(long publicKey) {
+        int loopSize = 0;
         long value = 1;
         while (value != publicKey) {
             loopSize++;
