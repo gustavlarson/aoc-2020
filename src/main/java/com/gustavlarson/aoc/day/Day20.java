@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day20 implements Day {
 
@@ -32,7 +33,7 @@ public class Day20 implements Day {
             grid.add(line.toCharArray());
         }
 
-        createImage();
+        arrangeTiles();
     }
 
     static class Tile {
@@ -224,7 +225,7 @@ public class Day20 implements Day {
         }
     }
 
-    void createImage() {
+    void arrangeTiles() {
         final Tile first = tiles.get(0);
         final Set<Tile> loose = Collections.newSetFromMap(new ConcurrentHashMap<>());
         loose.addAll(tiles);
@@ -235,7 +236,6 @@ public class Day20 implements Day {
             final Tile current = queue.pop();
             for (var tile : loose) {
                 var id = tile.id;
-                System.out.println(id);
                 for (var i = 0; i < 2; i++) {
 
                     tile.flip();
@@ -253,17 +253,119 @@ public class Day20 implements Day {
         }
     }
 
+    String createImage() {
+        StringBuilder output = new StringBuilder();
+
+        Tile row = tiles.stream().filter(tile1 -> tile1.left == null && tile1.up == null).findFirst().orElseThrow();
+        while (row != null) {
+            for (var i = 1; i < Tile.SIZE - 1; i++) {
+                Tile tile = row;
+                while (tile != null) {
+                    output.append(str(tile.grid[i]));
+                    tile = tile.right;
+                }
+                output.append("\n");
+            }
+            row = row.down;
+        }
+        return output.toString();
+    }
+
+    private static char[] str(boolean[] booleans) {
+        char[] res = new char[booleans.length - 2];
+        for (var i = 1; i < booleans.length - 1; i++) {
+            res[i - 1] = booleans[i] ? '#' : '.';
+        }
+        return res;
+    }
+
+    private static String rotate(String image) {
+        List<String> input = Arrays.stream(image.split("\n")).collect(Collectors.toList());
+        final StringBuilder rotated = new StringBuilder();
+        for (var i = input.size() - 1; i >= 0; i--) {
+            for (var j = 0; j <= input.get(i).length() - 1; j++) {
+                rotated.append(input.get(j).charAt(i));
+            }
+            rotated.append("\n");
+        }
+        return rotated.toString();
+    }
+
+    private static String flip(String image) {
+        List<String> input = Arrays.stream(image.split("\n")).collect(Collectors.toList());
+        List<String> flipped = new ArrayList<>(input);
+        for (var i = 0; i <= input.size() / 2 - 1; i++) {
+            flipped.set(i, input.get(input.size() - 1 - i));
+            flipped.set(input.size() - 1 - i, input.get(i));
+        }
+        return String.join("\n", flipped);
+    }
+
     @Override
     public long solvePart1() {
         return tiles.stream()
                 .filter(Tile::isCorner)
                 .mapToLong(tile -> tile.id)
-                .peek(System.out::println)
                 .reduce((a, b) -> a *= b).orElseThrow();
     }
 
+
     @Override
     public long solvePart2() {
-        return 0;
+        //System.out.println(createImage());
+//        System.out.println("------");
+//        System.out.println(rotate(rotate(rotate(rotate(createImage())))));
+//        String image = createImage();
+//        //System.out.println(image);
+//        var roughnessWithMonsters = getRoughness(image);
+//        for (var i = 0; i < 2; i++) {
+//            for (var j = 0; j < 4; j++) {
+//                //System.out.println(image);
+//                var imageWithMonsters = getMonsters(image);
+//                var roughnessWithoutMonsters = getRoughness(imageWithMonsters);
+//                if (roughnessWithoutMonsters < roughnessWithMonsters) return roughnessWithoutMonsters;
+//                image = rotate(image);
+//            }
+//            image = flip(image);
+//        }
+//        throw new IllegalStateException();
+//
+        String image = createImage();
+        //System.out.println(image);
+        var roughnessWithMonsters = getRoughness(image);
+        for (var i = 0; i < 2; i++) {
+            for (var j = 0; j < 4; j++) {
+                //System.out.println(image);
+                image = getMonsters(image);
+                image = rotate(image);
+            }
+            image = flip(image);
+        }
+        return getRoughness(image);
+    }
+
+    private static long getRoughness(String image) {
+        return image.chars().filter(c -> c == '#').count();
+    }
+
+    private static String getMonsters(final String image) {
+        StringBuilder sb = new StringBuilder(image);
+        var size = image.indexOf('\n');
+
+        final Pattern pattern = Pattern.compile(
+                "(#)[#.\\n]{" + (size - 18) + "}" +
+                        "(#)[#.]{4}(#)(#)[#.]{4}(#)(#)[#.]{4}(#)(#)(#)[#.\\n]{" + (size - 18) + "}" +
+                        "(#)[#.]{2}(#)[#.]{2}(#)[#.]{2}(#)[#.]{2}(#)[#.]{2}(#)");
+
+        Matcher m = pattern.matcher(image);
+        while (m.find()) {
+            var s = m.regionStart();
+            var e = m.regionEnd();
+            for (var group = 1; group <= m.groupCount(); group++) {
+                sb.replace(m.start(group), m.end(group), "O");
+            }
+            m.reset(sb.toString());
+        }
+        return sb.toString();
     }
 }

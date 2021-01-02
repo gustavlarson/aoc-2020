@@ -138,7 +138,7 @@ public class Day20Test {
     @Test
     public void testPart201() {
         final Day day = getDay(INPUT);
-        assertEquals(0, day.solvePart2());
+        assertEquals(273, day.solvePart2());
     }
 
     @Test
@@ -152,6 +152,6 @@ public class Day20Test {
     public void testPart2Real() {
         final List<String> input = getFromFile(20);
         final Day day = getDay(input);
-        assertEquals(0, day.solvePart2());
+        assertEquals(1705, day.solvePart2());
     }
 }
