@@ -15,7 +15,6 @@ public class Day20 implements Day {
     Pattern TILE_HEADER = Pattern.compile("Tile (\\d+):");
 
     public Day20(final List<String> input) {
-
         List<char[]> grid = new ArrayList<>();
         var id = 0;
         for (var line : input) {
@@ -227,22 +226,23 @@ public class Day20 implements Day {
 
     void arrangeTiles() {
         final Tile first = tiles.get(0);
-        final Set<Tile> loose = Collections.newSetFromMap(new ConcurrentHashMap<>());
-        loose.addAll(tiles);
-        loose.remove(first);
-        final Deque<Tile> queue = new ConcurrentLinkedDeque<>();
-        queue.add(first);
-        while (!queue.isEmpty()) {
-            final Tile current = queue.pop();
-            for (var tile : loose) {
-                var id = tile.id;
+        final Set<Tile> tilesNotPlaced = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        tilesNotPlaced.addAll(tiles);
+        tilesNotPlaced.remove(first);
+        final Deque<Tile> placedTilesWithoutNeighbours = new ConcurrentLinkedDeque<>();
+        placedTilesWithoutNeighbours.add(first);
+
+        while (!placedTilesWithoutNeighbours.isEmpty()) {
+            final Tile current = placedTilesWithoutNeighbours.pop();
+
+            for (var tile : tilesNotPlaced) {
                 for (var i = 0; i < 2; i++) {
 
                     tile.flip();
                     for (int j = 0; j < 4; j++) {
                         if (current.findMatch(tile)) {
-                            loose.remove(tile);
-                            queue.add(tile);
+                            tilesNotPlaced.remove(tile);
+                            placedTilesWithoutNeighbours.add(tile);
                             i = 2;
                             break;
                         }
@@ -253,10 +253,10 @@ public class Day20 implements Day {
         }
     }
 
-    String createImage() {
+    private String createImage() {
         StringBuilder output = new StringBuilder();
 
-        Tile row = tiles.stream().filter(tile1 -> tile1.left == null && tile1.up == null).findFirst().orElseThrow();
+        Tile row = tiles.stream().filter(tile -> tile.left == null && tile.up == null).findFirst().orElseThrow();
         while (row != null) {
             for (var i = 1; i < Tile.SIZE - 1; i++) {
                 Tile tile = row;
@@ -312,30 +312,10 @@ public class Day20 implements Day {
 
     @Override
     public long solvePart2() {
-        //System.out.println(createImage());
-//        System.out.println("------");
-//        System.out.println(rotate(rotate(rotate(rotate(createImage())))));
-//        String image = createImage();
-//        //System.out.println(image);
-//        var roughnessWithMonsters = getRoughness(image);
-//        for (var i = 0; i < 2; i++) {
-//            for (var j = 0; j < 4; j++) {
-//                //System.out.println(image);
-//                var imageWithMonsters = getMonsters(image);
-//                var roughnessWithoutMonsters = getRoughness(imageWithMonsters);
-//                if (roughnessWithoutMonsters < roughnessWithMonsters) return roughnessWithoutMonsters;
-//                image = rotate(image);
-//            }
-//            image = flip(image);
-//        }
-//        throw new IllegalStateException();
-//
         String image = createImage();
-        //System.out.println(image);
-        var roughnessWithMonsters = getRoughness(image);
+
         for (var i = 0; i < 2; i++) {
             for (var j = 0; j < 4; j++) {
-                //System.out.println(image);
                 image = getMonsters(image);
                 image = rotate(image);
             }
@@ -353,14 +333,12 @@ public class Day20 implements Day {
         var size = image.indexOf('\n');
 
         final Pattern pattern = Pattern.compile(
-                "(#)[#.\\n]{" + (size - 18) + "}" +
-                        "(#)[#.]{4}(#)(#)[#.]{4}(#)(#)[#.]{4}(#)(#)(#)[#.\\n]{" + (size - 18) + "}" +
-                        "(#)[#.]{2}(#)[#.]{2}(#)[#.]{2}(#)[#.]{2}(#)[#.]{2}(#)");
+                "(#).{" + (size - 18) + "}" +
+                        "(#)....(#)(#)....(#)(#)....(#)(#)(#).{" + (size - 18) + "}" +
+                        "(#)..(#)..(#)..(#)..(#)..(#)", Pattern.DOTALL);
 
         Matcher m = pattern.matcher(image);
         while (m.find()) {
-            var s = m.regionStart();
-            var e = m.regionEnd();
             for (var group = 1; group <= m.groupCount(); group++) {
                 sb.replace(m.start(group), m.end(group), "O");
             }

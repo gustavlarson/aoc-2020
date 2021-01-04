@@ -17,6 +17,33 @@ public class Day20Test {
 
     private static final List<String> INPUT;
 
+    @Test
+    public void testPart101() {
+        final Day day = getDay(INPUT);
+        assertEquals(20899048083289L, day.solvePart1());
+    }
+
+    @Test
+    public void testPart201() {
+        final Day day = getDay(INPUT);
+        assertEquals(273, day.solvePart2());
+    }
+
+
+    @Test
+    public void testPart1Real() {
+        final List<String> input = getFromFile(20);
+        final Day day = getDay(input);
+        assertEquals(15003787688423L, day.solvePart1());
+    }
+
+    //@Test
+    public static void testPart2Real() {
+        final List<String> input = getFromFile(20);
+        final Day day = getDay(input);
+        assertEquals(1705, day.solvePart2());
+    }
+
     static {
         INPUT = new ArrayList<>(getAsList("""
                 Tile 2311:
@@ -127,31 +154,5 @@ public class Day20Test {
                 ..#.......
                 ..#.###..."""));
         INPUT.add("");
-    }
-
-    @Test
-    public void testPart101() {
-        final Day day = getDay(INPUT);
-        assertEquals(20899048083289L, day.solvePart1());
-    }
-
-    @Test
-    public void testPart201() {
-        final Day day = getDay(INPUT);
-        assertEquals(273, day.solvePart2());
-    }
-
-    @Test
-    public void testPart1Real() {
-        final List<String> input = getFromFile(20);
-        final Day day = getDay(input);
-        assertEquals(15003787688423L, day.solvePart1());
-    }
-
-    @Test
-    public void testPart2Real() {
-        final List<String> input = getFromFile(20);
-        final Day day = getDay(input);
-        assertEquals(1705, day.solvePart2());
     }
 }
