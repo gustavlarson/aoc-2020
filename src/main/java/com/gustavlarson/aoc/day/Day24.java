@@ -18,7 +18,7 @@ public class Day24 implements Day {
         int z = 0;
 
         Tile(int x, int y, int z) {
-            if (x + y + z != 0) throw new IllegalStateException("WTF");
+            if (x + y + z != 0) throw new IllegalStateException("Illegal state");
             this.x = x;
             this.y = y;
             this.z = z;
@@ -54,7 +54,7 @@ public class Day24 implements Day {
                     }
                     default -> throw new IllegalArgumentException();
                 }
-                if (x + y + z != 0) throw new IllegalStateException("WTF");
+                if (x + y + z != 0) throw new IllegalStateException("Illegal state");
             }
         }
 
@@ -74,9 +74,7 @@ public class Day24 implements Day {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Tile tile = (Tile) o;
-            return x == tile.x &&
-                    y == tile.y &&
-                    z == tile.z;
+            return x == tile.x && y == tile.y && z == tile.z;
         }
 
         @Override
@@ -101,12 +99,6 @@ public class Day24 implements Day {
             map.put(tile, !isFlipped);
         }
         return map.values().stream().filter(v -> v).count();
-//        Map<Integer, List<Tile>> map = input.stream()
-//                .collect(Collectors.groupingBy(Tile::hashCode));
-//        return map
-//                .values().stream()
-//                .filter(tiles -> tiles.size() % 2 == 1)
-//                .count();
     }
 
     @Override
