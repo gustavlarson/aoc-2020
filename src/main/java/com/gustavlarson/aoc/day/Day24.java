@@ -81,8 +81,6 @@ public class Day24 implements Day {
         public int hashCode() {
             return Objects.hash(x, y, z);
         }
-
-
     }
 
     private final List<Tile> input;
@@ -93,12 +91,12 @@ public class Day24 implements Day {
 
     @Override
     public long solvePart1() {
-        Map<Tile, Boolean> map = new HashMap<>();
+        Map<Tile, Boolean> tiles = new HashMap<>();
         for (var tile : input) {
-            var isFlipped = map.getOrDefault(tile, false);
-            map.put(tile, !isFlipped);
+            var isFlipped = tiles.getOrDefault(tile, false);
+            tiles.put(tile, !isFlipped);
         }
-        return map.values().stream().filter(v -> v).count();
+        return tiles.values().stream().filter(v -> v).count();
     }
 
     @Override
@@ -108,19 +106,22 @@ public class Day24 implements Day {
             var isFlipped = tiles.getOrDefault(tile, false);
             tiles.put(tile, !isFlipped);
         }
+
         for (var i = 0; i < 100; i++) {
             Map<Tile, Boolean> newTiles = new ConcurrentHashMap<>();
-            for (var tile : tiles.keySet()) {
-                Map<Tile, Boolean> finalTiles = tiles;
+            Map<Tile, Boolean> finalTiles = tiles;
+
+            for (var tile : new ArrayList<>(tiles.keySet())) {
                 tile.getNeighbours().forEach(neighbour -> finalTiles.putIfAbsent(neighbour, false));
             }
-            for (var tile : tiles.keySet()) {
+
+            for (var tile : finalTiles.keySet()) {
                 newTiles.put(tile, tiles.get(tile));
-                var blackNeighbours = tile.getNeighbours().stream().filter(tiles::get).count();
-                if (tiles.get(tile) && (blackNeighbours == 0 || blackNeighbours > 2)) {
+                var blackNeighbours = tile.getNeighbours().stream().filter(neighbour -> finalTiles.getOrDefault(neighbour, false)).count();
+                if (finalTiles.get(tile) && (blackNeighbours == 0 || blackNeighbours > 2)) {
                     newTiles.put(tile, false);
                 }
-                if (!tiles.get(tile) && blackNeighbours == 2) {
+                if (!finalTiles.get(tile) && blackNeighbours == 2) {
                     newTiles.put(tile, true);
                 }
             }
